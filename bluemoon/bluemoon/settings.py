@@ -3,7 +3,7 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-basepath = '/homepages/19/d429491612/htdocs'
+basepath = '/homepages/19/d429491612/htdocs/git/django'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

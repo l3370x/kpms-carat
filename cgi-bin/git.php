@@ -1,5 +1,3 @@
 <?PHP
-
 exec("git pull")
-
 ?>

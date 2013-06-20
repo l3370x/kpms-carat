@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys, os
 
-basepath = '/homepages/19/d429491612/htdocs'
+basepath = '/homepages/19/d429491612/htdocs/git/django'
 
 sys.path.insert(0, basepath + '/.local/lib')
 sys.path.insert(0, basepath + '/bluemoon')

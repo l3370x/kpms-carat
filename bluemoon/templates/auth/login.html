@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if error %}<p><i>{{ error }}</i></p>{% endif %}
+
+<br>
+
+<form action="/student/auth/login/" method="post">
+{% csrf_token %}
+{{ form.as_ul }}
+<input type="submit" value="Login" class="button"/>
+</form>
+
+{% endblock %}
+

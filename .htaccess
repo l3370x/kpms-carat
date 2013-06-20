@@ -1,0 +1,19 @@
+AddHandler fcgid-script .fcgi
+RewriteEngine on
+RewriteBase /
+
+# Exclude any paths that should be served literally:
+RewriteRule 	^static/		-			[L,NC]
+RewriteRule     ^archive/                -                       [L,NC]
+RewriteRule     ^moodle/                -                       [L,NC]
+RewriteRule     ^photos/                -                       [L,NC]
+RewriteRule     ^photos2/                -                       [L,NC]
+RewriteRule	^data/			-			[L,NC]
+RewriteRule	^moodledata/		-			[L,NC]
+RewriteRule	^moodledata2/		-			[L,NC]
+RewriteRule	^minecraft/		-			[L,NC]
+# Add a default page
+RewriteRule 	^$			student			[NC]
+
+RewriteCond %{REQUEST_FILENAME} !(cgi-bin/bluemoon.fcgi) 
+RewriteRule 	^(.*)$ 			cgi-bin/bluemoon.fcgi/$1	[QSA,L]

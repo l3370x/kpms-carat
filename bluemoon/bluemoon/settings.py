@@ -3,7 +3,13 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-basepath = '/homepages/19/d429491612/htdocs/git/django'
+import os
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+if 'aaron' in ROOT_PATH:
+	basepath = '/home/aaron/schoolSite/kpms-carat/bluemoon'
+else
+	basepath = '/homepages/19/d429491612/htdocs/git/django'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

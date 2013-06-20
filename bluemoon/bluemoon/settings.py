@@ -8,7 +8,7 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 if 'aaron' in ROOT_PATH:
 	basepath = '/home/aaron/schoolSite/kpms-carat/bluemoon'
-else
+else:
 	basepath = '/homepages/19/d429491612/htdocs/git/django'
 
 ADMINS = (

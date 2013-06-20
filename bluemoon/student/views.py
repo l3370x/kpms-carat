@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 import django.contrib.auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -13,12 +13,10 @@ from django.shortcuts import render
 from student.models import *
 from teacher.models import *
 
-ADMIN_NAME = 'l3370x'
-TEACHER_USERNAME = 'Rick'
 
 def startPage(request):
 	if request.user.is_authenticated():
-		if request.user.username == ADMIN_NAME:
+		if request.user.groups.filter(name='Admin').count():
 			logout(request)
 			return login(request)
 		if request.user.username == TEACHER_USERNAME:
@@ -53,7 +51,7 @@ def login(request):
                                       {'form':form,
                                        'error': 'Invalid username or password'},
                                       context_instance=RequestContext(request))
-        if user.username == TEACHER_USERNAME:
+        if user.groups.filter(name='Teacher').count():
 			return teacherHome(request,user)
         django.contrib.auth.login(request,user)
         return studentHome(request)

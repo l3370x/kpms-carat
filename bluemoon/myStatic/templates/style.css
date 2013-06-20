@@ -6,7 +6,7 @@
 
 html, body {
     height: 100%;
-	background: rgb(20,50,50);
+	#background: rgb(20,50,50);
     font-family:'Helvetica', Arial, Verdana;
 }
 

@@ -5,9 +5,10 @@ TEMPLATE_DEBUG = DEBUG
 
 import os
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-
+locHost = False
 if 'aaron' in ROOT_PATH:
 	basepath = '/home/aaron/schoolSite/kpms-carat'
+	locHost = True
 else:
 	basepath = '/homepages/19/d429491612/htdocs/git/django'
 
@@ -28,6 +29,14 @@ DATABASES = {
         'PORT': '3306',                      # Set to empty string for default.
     }
 }
+
+if locHost:
+	DATABASES = {
+		'default': {
+		    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+		    'NAME': basepath + '/db475444103',                      # Or path to database file if using sqlite3.
+		    }
+	}
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -79,8 +88,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    # Don't forget to use absolute paths, not relative paths.	
 )
+
+if locHost:
+	STATICFILES_DIRS=(basepath+'/bluemoon/myStatic',)
 
 # List of finder classes that know how to find static files in
 # various locations.

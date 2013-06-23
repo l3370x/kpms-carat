@@ -14,7 +14,48 @@ from django.shortcuts import render
 from student.models import *
 from teacher.models import *
 from course.models import *
+from lesson.models import *
 
+@login_required
+def lessonInfo(request,lessonID):
+    try:
+        l = Lesson.objects.get(id=lessonID)
+    except Class.DoesNotExist:
+        raise Http404
+        
+    if request.POST:
+        form = LessonForm(request.POST, instance = l)
+        if form.is_valid():
+            form.save()
+    else:
+        form = LessonForm(instance = l)
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    return render(request, 'teacher/lesson.html', {'theTeacher':theTeacher, 'l':l,'form':form})
+
+@login_required
+def addLessonToClass(request,classID):
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    try:
+        c = Class.objects.get(id=classID)
+    except Class.DoesNotExist:
+        raise Http404
+    if request.method == 'GET':
+        form = LessonForm()
+        return render_to_response('teacher/addLesson.html', {'form':form,'classID':classID,'theClass':c,'theTeacher':theTeacher,'create':True},
+                                  context_instance=RequestContext(request))
+
+    if request.method == 'POST':
+        form = LessonForm(request.POST)
+        if not form.is_valid():
+            return render_to_response('teacher/addLesson.html', {'form':form,'classID':classID,'theClass':c,'theTeacher':theTeacher,'create':True},
+                                  context_instance=RequestContext(request))
+
+        
+        classO = form.save()
+        classO.save()
+        classO.classes.add(c)
+        classO.save()
+        return teacherHome(request)
 
 @login_required
 def addStudentsToClass(request,classID):
@@ -58,10 +99,11 @@ def classInfo(request,classID):
         if form.is_valid():
             form.save()
     else:
-    	form = ClassNotesForm(instance = c)
+        form = ClassNotesForm(instance = c)
     theTeacher = Teacher.objects.get(user=request.user.id)
+    theLessons = Lesson.objects.filter(classes=c.id)
     theStudents = Student.objects.filter(classes=c.id)
-    return render(request, 'teacher/class.html', {'theTeacher':theTeacher, 'c':c,'form':form,'theStudents':theStudents})
+    return render(request, 'teacher/class.html', {'theTeacher':theTeacher, 'c':c,'form':form,'theStudents':theStudents,'theLessons':theLessons})
 
 @login_required
 def allClasses(request):

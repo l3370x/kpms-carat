@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'student',
     'teacher',
     'course',
+    'lesson',
 )
 
 

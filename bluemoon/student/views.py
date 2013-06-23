@@ -20,6 +20,15 @@ def buildDict(s):
 	d['myClasses'] = s.classes.all()
 	return d
 
+@login_required
+def lessonPage(request,lessonID):
+	try:
+		theLesson = Lesson.objects.get(id=lessonID)
+	except Lesson.DoesNotExist:
+		raise Http404
+	d = buildDict(Student.objects.get(user=request.user.id))
+	d['theLesson'] = theLesson
+	return render(request,'student/lesson.html',d)
 
 @login_required
 def classInfo(request,classID):
@@ -29,6 +38,7 @@ def classInfo(request,classID):
 		raise Http404
 	d = buildDict(Student.objects.get(user=request.user.id))
 	d['theClass'] = theClass
+	d['theLessons'] = Lesson.objects.filter(classes=theClass).order_by('date')
 	return render(request,'student/class.html',d)
 
 @login_required

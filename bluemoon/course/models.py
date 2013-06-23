@@ -1,7 +1,6 @@
 from django.db import models
 from django import forms
 
-
 class Class(models.Model):
     def __unicode__(self):
         return self.class_title
@@ -14,14 +13,15 @@ class Class(models.Model):
 class ClassForm(forms.ModelForm):
     class Meta:
         model = Class
+        exclude = ('lessons',)
 
 class ClassNotesForm(forms.ModelForm):
     class Meta:
         model = Class
-        exclude = ('class_title','calendar_url',)
+        exclude = ('class_title','calendar_url','lessons',)
         
 class ClassTitleForm(forms.ModelForm):
     class Meta:
         model = Class
-        exclude = ('notes','calendar_url',)
+        exclude = ('notes','calendar_url','lessons',)
     

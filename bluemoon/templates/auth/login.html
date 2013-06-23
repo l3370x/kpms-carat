@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <form action="/student/auth/login/" method="post" class="login">
 {% csrf_token %}
 {% if error %}<p><i>{{ error }}</i></p>{% endif %}

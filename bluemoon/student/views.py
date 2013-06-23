@@ -13,20 +13,21 @@ from django.shortcuts import render
 from student.models import *
 from teacher.models import *
 
+from teacher.views import *
+
 
 def startPage(request):
 	if request.user.is_authenticated():
 		if request.user.groups.filter(name='Admin').count():
 			logout(request)
 			return login(request)
-		if request.user.username == TEACHER_USERNAME:
-			return teacherHome(request)
 		return studentHome(request)
 	return login(request)
 
-def teacherHome(request,teacherUser):
+@login_required
+def teacher2Home(request,teacherUser):
 	theTeacher = Teacher.objects.get(user=teacherUser.id)
-	return render(request,'teacher/teacherHome.html',{'theTeacher':theTeacher})
+	return redirect('/teacher',{'theTeacher':theTeacher})
 
 def logout(request):
 	django.contrib.auth.logout(request)
@@ -51,11 +52,12 @@ def login(request):
                                       {'form':form,
                                        'error': 'Invalid username or password'},
                                       context_instance=RequestContext(request))
-        if user.groups.filter(name='Teacher').count():
-			return teacherHome(request,user)
         django.contrib.auth.login(request,user)
+        if user.groups.filter(name='Teacher').count():
+			return teacher2Home(request,user)
         return studentHome(request)
 
+@login_required
 def studentHome(request):
 	theStudent = Student.objects.get(user=request.user.id)
 	return render(request,'student/studentHome.html', {'theStudent':theStudent})

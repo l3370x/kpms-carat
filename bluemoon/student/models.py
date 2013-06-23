@@ -26,3 +26,7 @@ class UserForm(forms.Form):
   password = forms.CharField(widget=forms.PasswordInput(render_value=False),max_length=100)
   confirm = forms.CharField(widget=forms.PasswordInput(render_value=False),max_length=100)
 
+
+class StudentChangePasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput(render_value=True),max_length=100)
+    

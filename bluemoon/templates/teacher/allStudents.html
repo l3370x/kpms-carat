@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block leftBar %}
+{% include "teacher/leftBar.html" %}
+{% endblock %}
+
+
+
+{% block content %}
+<table>
+<tr>
+<td>Name</td>
+<td>E-mail</td>
+</tr>
+{% for student in theStudents %}
+<div class="studentRow">
+<tr>
+<td><a href="/teacher/student/{{ student.user }}">{{ student.first_name }} {{ student.last_name }}</a></td>
+<td>{{ student.email }}</td>
+</tr>
+</div>
+{% empty %}
+</table>
+Sorry, no students are added yet.
+{% endfor %}
+{% if theStudents %}
+</table>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block username %}
+Hello {{ theTeacher.first_name }}
+{% endblock %}

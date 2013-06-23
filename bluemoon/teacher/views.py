@@ -13,7 +13,82 @@ from django.shortcuts import render
 
 from student.models import *
 from teacher.models import *
+from course.models import *
 
+
+@login_required
+def addStudentsToClass(request,classID):
+	theTeacher = Teacher.objects.get(user=request.user.id)
+	try:
+		c = Class.objects.get(id=classID)
+	except Class.DoesNotExist:
+		raise Http404
+	theStudents = Student.objects.filter().order_by('last_name')
+	return render(request,'teacher/addStudentToClass.html', {'theTeacher':theTeacher, 'c':c,'theStudents':theStudents})
+
+
+@login_required
+def classTitleChange(request,classID):
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    try:
+        c = Class.objects.get(id=classID)
+    except Class.DoesNotExist:
+        raise Http404
+    
+    if request.POST:
+        form = ClassTitleForm(request.POST, instance = c)
+        if form.is_valid():
+            form.save()
+            return classInfo(request,classID)
+    else:
+        form = ClassTitleForm(instance=c)
+    return render_to_response("teacher/changeClassTitle.html", {
+        "form": form,'c':c
+    }, context_instance=RequestContext(request))
+
+@login_required
+def classInfo(request,classID):
+    try:
+        c = Class.objects.get(id=classID)
+    except Class.DoesNotExist:
+        raise Http404
+        
+    if request.POST:
+        form = ClassNotesForm(request.POST, instance = c)
+        if form.is_valid():
+            form.save()
+    else:
+    	form = ClassNotesForm(instance = c)
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    theStudents = Student.objects.filter(classes=c.id)
+    return render(request, 'teacher/class.html', {'theTeacher':theTeacher, 'c':c,'form':form,'theStudents':theStudents})
+
+@login_required
+def allClasses(request):
+    theClasses = Class.objects.all()
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    return render(request,'teacher/allClasses.html', {'theTeacher':theTeacher, 'theClasses':theClasses})
+
+@login_required
+def addClass(request):
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    if request.method == 'GET':
+        form = ClassForm()
+        return render_to_response('teacher/addClass.html', {'form':form,'theTeacher':theTeacher,'create':True},
+                                  context_instance=RequestContext(request))
+
+    if request.method == 'POST':
+        form = ClassForm(request.POST)
+        if not form.is_valid():
+            return render_to_response('teacher/addClass.html', {'form':form,'theTeacher':theTeacher,'create':True},
+                                  context_instance=RequestContext(request))
+
+        
+        classO = form.save()
+        classO.save()
+        return teacherHome(request)
+
+@login_required
 def studentPassChange(request,usern):
     theTeacher = Teacher.objects.get(user=request.user.id)
     try:
@@ -33,7 +108,8 @@ def studentPassChange(request,usern):
     return render_to_response("teacher/changePassword.html", {
         "form": form,'s':s
     }, context_instance=RequestContext(request))
-    
+
+@login_required
 def studentInfoChange(request,usern):
     theTeacher = Teacher.objects.get(user=request.user.id)
     try:
@@ -53,11 +129,13 @@ def studentInfoChange(request,usern):
         "form": form,'s':s
     }, context_instance=RequestContext(request))
 
+@login_required
 def studentInfo(request,usern):
 	s = Student.objects.get(user=User.objects.get(username=usern).id)
 	theTeacher = Teacher.objects.get(user=request.user.id)
 	return render(request, 'teacher/student.html', {'theTeacher':theTeacher, 's':s})
 
+@login_required
 def allStudents(request):
 	theStudents = Student.objects.all()
 	theTeacher = Teacher.objects.get(user=request.user.id)
@@ -105,7 +183,10 @@ def addStudent(request):
 
 @login_required
 def teacherHome(request):
-	theTeacher = Teacher.objects.get(user=request.user.id)
+	try:
+		theTeacher = Teacher.objects.get(user=request.user.id)
+	except Teacher.DoesNotExist:
+		return redirect('/',{})
 	return render(request,'teacher/teacherHome.html',{'theTeacher':theTeacher})
 
 

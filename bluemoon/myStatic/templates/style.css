@@ -175,6 +175,49 @@ box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 	list-style-type: none;
 }
 
+.leftBarLink {
+	color: #0088cc;
+}
+
+.leftBarLinkindent1 {
+	padding-left: 15px;
+	color: #0088cc;
+}
+
+.leftBarLink a {
+	color: #0088cc;
+}
+
+.leftBarLink a:hover, a:focus {
+	color:rgb(7, 95, 139);
+}
+
+.leftBarLinkindent1 a:hover, a:focus {
+	color:rgb(7, 95, 139);
+}
+
+.leftBarHiddenLink {
+	color: rgb(153, 153, 153);
+}
+
+.leftBarHiddenLink a, a:hover, a:focus {
+	color: rgb(153, 153, 153);
+}
+
+.sidebar-nav-fixed a {
+	text-decoration: none;
+}
+
+
+.sidebar-nav-fixed a:active, a.active, a.disabled, a[disabled] {
+	color: #0088cc;
+}
+
+.sidebar-nav-fixed li:hover, li:focus {
+	text-decoration: none;
+	background-color: #eeeeee;
+}
+
 .sidebar-nav-fixed ul {
 	-webkit-padding-start: 5px;
 }

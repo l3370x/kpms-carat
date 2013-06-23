@@ -4,7 +4,11 @@
 {% include "teacher/leftBar.html" %}
 {% endblock %}
 
-
+{% block extraHeader %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/media/ajax_search/css/ajax_search.css" />
+<script src="/media/ajax_search/js/ajax_search.js" type="text/javascript"></script>
+{% endblock %}
 
 {% block content %}
 <table>

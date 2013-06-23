@@ -7,6 +7,7 @@ class StudentAdmin(admin.ModelAdmin):
 	('first name', {'fields': ['first_name']}),
 	('last name', {'fields': ['last_name']}),
 	('email', {'fields': ['email']}),
+    ('classes', {'fields': ['classes']}),
   ]
   readonly_fields=('user',)
 

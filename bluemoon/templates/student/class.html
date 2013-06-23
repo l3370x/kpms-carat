@@ -4,12 +4,18 @@
 {% include "student/leftBar.html" %}
 {% endblock %}
 
+
+
 {% block content %}
+{{ theClass.class_title }}
 <br>
-This is the student page!
+<br>
+Welcome to class page.
 
 {% endblock %}
 
+
+
 {% block username %}
-Welcome {{ theStudent.first_name }}
+Hello {{ theStudent.first_name }}
 {% endblock %}

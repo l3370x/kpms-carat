@@ -221,7 +221,7 @@ def addStudent(request):
                                             email=request.POST['email'])
 
         
-        return teacherHome(request)
+        return allStudents(request)
 
 @login_required
 def teacherHome(request):

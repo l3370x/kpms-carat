@@ -16,9 +16,9 @@ from teacher.models import *
 from course.models import *
 from lesson.models import *
 
-def buildDict(t):
+def buildDict(theTeacher):
     d = {}
-    d['theTeacher'] = t
+    d['theTeacher'] = theTeacher
     d['theClasses'] = Class.objects.all()
     return d
 
@@ -36,24 +36,32 @@ def lessonInfo(request,lessonID):
     else:
         form = LessonForm(instance = l)
     theTeacher = Teacher.objects.get(user=request.user.id)
-    return render(request, 'teacher/lesson.html', {'theTeacher':theTeacher, 'l':l,'form':form})
+    d = buildDict(theTeacher)
+    d['l'] = l
+    d['form'] = form
+    return render(request, 'teacher/lesson.html', d)
 
 @login_required
 def addLessonToClass(request,classID):
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    d['classID'] = classID
     try:
         c = Class.objects.get(id=classID)
+        d['theClass'] = c
     except Class.DoesNotExist:
         raise Http404
     if request.method == 'GET':
         form = LessonForm()
-        return render_to_response('teacher/addLesson.html', {'form':form,'classID':classID,'theClass':c,'theTeacher':theTeacher,'create':True},
+        d['form'] = form
+        return render_to_response('teacher/addLesson.html', d,
                                   context_instance=RequestContext(request))
 
     if request.method == 'POST':
         form = LessonForm(request.POST)
+        d['form'] = form
         if not form.is_valid():
-            return render_to_response('teacher/addLesson.html', {'form':form,'classID':classID,'theClass':c,'theTeacher':theTeacher,'create':True},
+            return render_to_response('teacher/addLesson.html', d,
                                   context_instance=RequestContext(request))
 
         
@@ -65,33 +73,39 @@ def addLessonToClass(request,classID):
 
 @login_required
 def addStudentsToClass(request,classID):
-	theTeacher = Teacher.objects.get(user=request.user.id)
-	try:
-		c = Class.objects.get(id=classID)
-	except Class.DoesNotExist:
-		raise Http404
-	theStudents = Student.objects.filter().order_by('last_name')
-	return render(request,'teacher/addStudentToClass.html', {'theTeacher':theTeacher, 'c':c,'theStudents':theStudents})
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    try:
+        c = Class.objects.get(id=classID)
+        d['c'] = c
+    except Class.DoesNotExist:
+        raise Http404
+    theStudents = Student.objects.filter().order_by('last_name')
+    d['theStudents'] = theStudents
+    return render(request,'teacher/addStudentToClass.html', d)
 
 
 @login_required
 def classTitleChange(request,classID):
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    d['classID'] = classID
     try:
         c = Class.objects.get(id=classID)
+        d['c'] = c
     except Class.DoesNotExist:
         raise Http404
     
     if request.POST:
         form = ClassTitleForm(request.POST, instance = c)
+        d['form'] = form
         if form.is_valid():
             form.save()
             return classInfo(request,classID)
     else:
         form = ClassTitleForm(instance=c)
-    return render_to_response("teacher/changeClassTitle.html", {
-        "form": form,'c':c
-    }, context_instance=RequestContext(request))
+        d['form'] = form
+    return render_to_response("teacher/changeClassTitle.html", d, context_instance=RequestContext(request))
 
 @login_required
 def classInfo(request,classID):
@@ -107,28 +121,36 @@ def classInfo(request,classID):
     else:
         form = ClassNotesForm(instance = c)
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    d['form'] = form
     theLessons = Lesson.objects.filter(classes=c.id)
+    d['thelessons'] = theLessons
     theStudents = Student.objects.filter(classes=c.id)
-    return render(request, 'teacher/class.html', {'theTeacher':theTeacher, 'c':c,'form':form,'theStudents':theStudents,'theLessons':theLessons})
+    d['theStudents'] = theStudents
+    d['c'] = c
+    return render(request, 'teacher/class.html', d)
 
 @login_required
 def allClasses(request):
-    theClasses = Class.objects.all()
     theTeacher = Teacher.objects.get(user=request.user.id)
-    return render(request,'teacher/allClasses.html', {'theTeacher':theTeacher, 'theClasses':theClasses})
+    d = buildDict(theTeacher)
+    return render(request,'teacher/allClasses.html', d)
 
 @login_required
 def addClass(request):
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
     if request.method == 'GET':
         form = ClassForm()
-        return render_to_response('teacher/addClass.html', {'form':form,'theTeacher':theTeacher,'create':True},
+        d['form'] = form
+        return render_to_response('teacher/addClass.html', d,
                                   context_instance=RequestContext(request))
 
     if request.method == 'POST':
         form = ClassForm(request.POST)
+        d['form'] = form
         if not form.is_valid():
-            return render_to_response('teacher/addClass.html', {'form':form,'theTeacher':theTeacher,'create':True},
+            return render_to_response('teacher/addClass.html', d,
                                   context_instance=RequestContext(request))
 
         
@@ -139,84 +161,86 @@ def addClass(request):
 @login_required
 def studentPassChange(request,usern):
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
     try:
         u = User.objects.get(username=usern)
         s = Student.objects.get(user=u.id)
     except Student.DoesNotExist:
         raise Http404
-    
+    d['s'] = s
     if request.POST:
         form = StudentChangePasswordForm(request.POST)
+        d['form'] = form
         if form.is_valid():
             u.set_password(request.POST['password'])
             u.save()
             return studentInfo(request,usern)
     else:
         form = StudentChangePasswordForm()
-    return render_to_response("teacher/changePassword.html", {
-        "form": form,'s':s
-    }, context_instance=RequestContext(request))
+        d['form'] = form
+    return render_to_response("teacher/changePassword.html", d, context_instance=RequestContext(request))
 
 @login_required
 def studentInfoChange(request,usern):
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
     try:
         u = User.objects.get(username=usern)
         s = Student.objects.get(user=u.id)
     except Student.DoesNotExist:
         raise Http404
-    
+    d['s'] = s
     if request.POST:
         form = StudentForm(request.POST, instance = s)
+        d['form'] = form
         if form.is_valid():
             form.save()
             return studentInfo(request,usern)
     else:
         form = StudentForm(instance = s)
-    return render_to_response("teacher/changeInfo.html", {
-        "form": form,'s':s
-    }, context_instance=RequestContext(request))
+        d['form'] = form
+    return render_to_response("teacher/changeInfo.html", d, context_instance=RequestContext(request))
 
 @login_required
 def studentInfo(request,usern):
-	s = Student.objects.get(user=User.objects.get(username=usern).id)
-	theTeacher = Teacher.objects.get(user=request.user.id)
-	return render(request, 'teacher/student.html', {'theTeacher':theTeacher, 's':s})
+    s = Student.objects.get(user=User.objects.get(username=usern).id)
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    d['s'] = s
+    return render(request, 'teacher/student.html', d)
 
 @login_required
 def allStudents(request):
-	theStudents = Student.objects.all()
-	theTeacher = Teacher.objects.get(user=request.user.id)
-	return render(request,'teacher/allStudents.html', {'theTeacher':theTeacher, 'theStudents':theStudents})
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    d['theStudents'] = Student.objects.all()
+    return render(request,'teacher/allStudents.html', d)
 
 @login_required
 def addStudent(request):
     theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
     if request.method == 'GET':
         form = UserForm()
-        return render_to_response('teacher/addStudent.html', {'form':form,'theTeacher':theTeacher,'create':True},
-                                  context_instance=RequestContext(request))
+        d['form'] = form
+        return render_to_response('teacher/addStudent.html', d, context_instance=RequestContext(request))
 
     if request.method == 'POST':
         form = UserForm(request.POST)
+        d['form'] = form
         if not form.is_valid():
-            return render_to_response('teacher/addStudent.html', {'form':form,'theTeacher':theTeacher,'create':True},
-                                  context_instance=RequestContext(request))
+            return render_to_response('teacher/addStudent.html', d, context_instance=RequestContext(request))
 
         try:
             u = User.objects.get(username=request.POST['username'])
-            return render_to_response('teacher/addStudent.html',
-                                      {'form':form,'theTeacher':theTeacher,
-                                       'error':'Username already taken','create':True},
-                                  context_instance=RequestContext(request))
+            d['error'] = 'Username already taken'
+            return render_to_response('teacher/addStudent.html',d, context_instance=RequestContext(request))
         except User.DoesNotExist:
             pass
 
         if request.POST['password'] != request.POST['confirm']:
-            return render_to_response('teacher/addStudent.html',
-                                      {'form':form,'theTeacher':theTeacher,
-                                       'error':'Passwords must match','create':True},
-                                  context_instance=RequestContext(request))
+            d['error'] = 'Passwords must match'
+            return render_to_response('teacher/addStudent.html',d, context_instance=RequestContext(request))
 
         userO = User.objects.create_user(request.POST['username'],
                                         request.POST['email'],

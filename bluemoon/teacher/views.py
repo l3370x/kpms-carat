@@ -124,7 +124,7 @@ def classInfo(request,classID):
     d = buildDict(theTeacher)
     d['form'] = form
     theLessons = Lesson.objects.filter(classes=c.id)
-    d['thelessons'] = theLessons
+    d['theLessons'] = theLessons
     theStudents = Student.objects.filter(classes=c.id)
     d['theStudents'] = theStudents
     d['c'] = c

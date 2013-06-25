@@ -19,7 +19,7 @@ from lesson.models import *
 def buildDict(t):
     d = {}
     d['theTeacher'] = t
-    d['myClasses'] = t.classes.all()
+    d['theClasses'] = Class.objects.all()
     return d
 
 @login_required
@@ -235,8 +235,8 @@ def teacherHome(request):
         theTeacher = Teacher.objects.get(user=request.user.id)
     except Teacher.DoesNotExist:
         return redirect('/',{})
-    
-    return render(request,'teacher/teacherHome.html',{'theTeacher':theTeacher})
+    d = buildDict(theTeacher)
+    return render(request,'teacher/teacherHome.html',d)
 
 
 

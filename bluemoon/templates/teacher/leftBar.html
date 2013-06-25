@@ -7,5 +7,10 @@
 <li><a href="/teacher/allStudents">All Students</a></li>
 <br>
 <li><a href="/teacher/addClass">Add Class</a></li>
-<li><a href="/teacher/allClasses">All Classes</a></li>
+<li class="leftBarHiddenLink"><a href="/teacher/allClasses">All Classes</a></li>
+{% for c in theClasses %}
+<a href="/teacher/class/{{ c.id }}"><li class="leftBarLinkindent1">{{ c.class_title }}</li></a>
+{% empty %}
+Sorry, no classes are added yet.
+{% endfor %}
 </ul>

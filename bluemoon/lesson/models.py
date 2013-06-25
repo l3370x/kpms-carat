@@ -23,4 +23,4 @@ class LessonForm(forms.ModelForm):
         widgets = {
           'htmlStuff': forms.Textarea(attrs={'rows':40, 'cols':15}),
         }
-        exclude = ('classes',)
+        exclude = ('classes','date')

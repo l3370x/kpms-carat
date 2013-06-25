@@ -16,6 +16,12 @@ from teacher.models import *
 from course.models import *
 from lesson.models import *
 
+def buildDict(t):
+    d = {}
+    d['theTeacher'] = t
+    d['myClasses'] = t.classes.all()
+    return d
+
 @login_required
 def lessonInfo(request,lessonID):
     try:
@@ -225,11 +231,12 @@ def addStudent(request):
 
 @login_required
 def teacherHome(request):
-	try:
-		theTeacher = Teacher.objects.get(user=request.user.id)
-	except Teacher.DoesNotExist:
-		return redirect('/',{})
-	return render(request,'teacher/teacherHome.html',{'theTeacher':theTeacher})
+    try:
+        theTeacher = Teacher.objects.get(user=request.user.id)
+    except Teacher.DoesNotExist:
+        return redirect('/',{})
+    
+    return render(request,'teacher/teacherHome.html',{'theTeacher':theTeacher})
 
 
 

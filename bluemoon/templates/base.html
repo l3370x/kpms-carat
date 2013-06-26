@@ -14,15 +14,7 @@
 <div class="topbar">
 <ul>
 <li class="tbHeader">{% block username %} {% endblock %}</li>
-{% if theTeacher %}
-<li class="tbHeader"><a class="tbHeaderLink" href="/teacher">Home</a></li>
-{% else %}
-<li class="tbHeader"><a class="tbHeaderLink" href="/student">Home</a></li>
-{% endif %}
-<li class="tbHeader"><a class="tbHeaderLink" href="/auth/logout/">Log Out</a></li>
-{% if theTeacher %}
-<li class="tbHeader"><a class="tbHeaderLink" href="/admin">Admin</a></li>
-{% endif %}
+
 </ul>
 </div>
 

@@ -15,5 +15,6 @@ urlpatterns = patterns('teacher.views',
 			url(r'^class/(?P<classID>\d+)/addStudents/$', 'addStudentsToClass'),
 			url(r'^class/(?P<classID>\d+)/addLesson/$', 'addLessonToClass'),
 			url(r'^class/(?P<classID>\d+)/deleteClass/$', 'removeClass'),
+			url(r'^class/(?P<classID>\d+)/confirmedDelete/$', 'removeClassConfirmed'),
 			url(r'^$', 'teacherHome'),
 			)

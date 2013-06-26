@@ -16,6 +16,7 @@ from teacher.models import *
 from course.models import *
 from lesson.models import *
 
+
 def buildDict(theTeacher):
     d = {}
     d['theTeacher'] = theTeacher
@@ -23,10 +24,37 @@ def buildDict(theTeacher):
     return d
 
 @login_required
+def removeClass(request,classID):
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    try:
+        c = Class.objects.get(id=classID)
+    except Class.DoesNotExist:
+        raise Http404
+    
+    d['theClass'] = c
+    d['message'] = "Do you want to delete this class?"
+    d['prevLink'] = "/teacher"
+    d['actionLink'] = "/teacher/class/"+classID+"/confirmedDelete/"
+    return render(request,'teacher/confirmDeleteClass.html',d)
+
+@login_required
+def removeClassConfirmed(request,classID):
+    theTeacher = Teacher.objects.get(user=request.user.id)
+    d = buildDict(theTeacher)
+    try:
+        c = Class.objects.get(id=classID)
+    except:
+        raise Http404
+    
+    c.delete()
+    return teacherHome(request)
+
+@login_required
 def lessonInfo(request,lessonID):
     try:
         l = Lesson.objects.get(id=lessonID)
-    except Class.DoesNotExist:
+    except Lesson.DoesNotExist:
         raise Http404
         
     if request.POST:

@@ -8,5 +8,5 @@ class ClassAdmin(admin.ModelAdmin):
 	('notes', {'fields': ['notes']}),
   ]
 
-admin.site.register(Class,ClassAdmin)
+admin.site.register(Class, ClassAdmin)
 

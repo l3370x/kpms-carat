@@ -9,7 +9,7 @@ class StudentAdmin(admin.ModelAdmin):
 	('email', {'fields': ['email']}),
     ('classes', {'fields': ['classes']}),
   ]
-  readonly_fields=('user',)
+  readonly_fields = ('user',)
 
-admin.site.register(Student,StudentAdmin)
+admin.site.register(Student, StudentAdmin)
 

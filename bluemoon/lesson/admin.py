@@ -9,5 +9,5 @@ class LessonAdmin(admin.ModelAdmin):
     ('webPage', {'fields': ['htmlStuff']}),
   ]
 
-admin.site.register(Lesson,LessonAdmin)
+admin.site.register(Lesson, LessonAdmin)
 

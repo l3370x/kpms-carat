@@ -9,6 +9,9 @@ locHost = False
 if 'aaron' in ROOT_PATH:
 	basepath = '/home/aaron/schoolSite/kpms-carat'
 	locHost = True
+elif 'Aaron' in ROOT_PATH:
+	basepath = 'C:\Users\Aaron\Documents\GitHub\kpms-carat'
+	locHost = True
 else:
 	basepath = '/homepages/19/d429491612/htdocs/git/django'
 
@@ -20,21 +23,21 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db475444103',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'db475444103',  # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'dbo475444103',
         'PASSWORD': 'calm1717',
-        'HOST': 'db475444103.db.1and1.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '3306',                      # Set to empty string for default.
+        'HOST': 'db475444103.db.1and1.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '3306',  # Set to empty string for default.
     }
 }
 
 if locHost:
 	DATABASES = {
 		'default': {
-		    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-		    'NAME': basepath + '/db475444103',                      # Or path to database file if using sqlite3.
+		    'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+		    'NAME': basepath + '/db475444103',  # Or path to database file if using sqlite3.
 		    }
 	}
 
@@ -88,11 +91,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.	
+    # Don't forget to use absolute paths, not relative paths.
 )
 
 if locHost:
-	STATICFILES_DIRS=(basepath+'/bluemoon/myStatic',)
+	STATICFILES_DIRS = (basepath + '/bluemoon/myStatic',)
 
 # List of finder classes that know how to find static files in
 # various locations.

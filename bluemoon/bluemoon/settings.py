@@ -6,7 +6,10 @@ TEMPLATE_DEBUG = DEBUG
 import os
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 locHost = False
-if 'aaron' in ROOT_PATH:
+if 'aaronm3' in ROOT_PATH:
+	basepath= 'C:/Users/aaronm3/Documents/GitHub/kpms-carat'
+	locHost = True
+elif 'aaron' in ROOT_PATH:
 	basepath = '/home/aaron/schoolSite/kpms-carat'
 	locHost = True
 elif 'Aaron' in ROOT_PATH:

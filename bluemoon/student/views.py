@@ -18,7 +18,7 @@ def buildDict(s):
 	d['myClasses'] = s.classes.all()
 	return d
 
-def StudentHome(request):
+def studentHome(request):
 	if request.user.is_authenticated():
 		if request.user.groups.filter(name = 'Admin').count():
 			django.contrib.auth.logout(request)

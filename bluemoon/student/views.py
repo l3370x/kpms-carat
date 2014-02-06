@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import render
 from student.models import *
 
 def buildDict(s):
@@ -17,6 +17,14 @@ def buildDict(s):
 	d['theStudent'] = s
 	d['myClasses'] = s.classes.all()
 	return d
+
+def StudentHome(request):
+	if request.user.is_authenticated():
+		if request.user.groups.filter(name = 'Admin').count():
+			django.contrib.auth.logout(request)
+			return google_login(request)
+		return render(request, 'student/inside.html', {})
+	return google_login(request)
 
 # It's probably a good idea to put your consumer's OAuth token and
 # OAuth secret into your project's settings.

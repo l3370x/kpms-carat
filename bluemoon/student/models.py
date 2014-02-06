@@ -1,8 +1,21 @@
-from django.db import models
+import pickle
+import base64
+
+from django.contrib import admin
 from django.contrib.auth.models import User
+from django.db import models
+
+from oauth2client.django_orm import FlowField
+from oauth2client.django_orm import CredentialsField
 
 
-class Student(models.Model):
-  user = models.ForeignKey(User, editable = False)
-  oauth_token = models.CharField(max_length = 200)
-  oauth_secret = models.CharField(max_length = 200)
+class CredentialsModel(models.Model):
+  id = models.ForeignKey(User, primary_key = True)
+  credential = CredentialsField()
+
+
+class CredentialsAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(CredentialsModel, CredentialsAdmin)

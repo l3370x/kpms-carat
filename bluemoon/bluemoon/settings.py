@@ -157,10 +157,7 @@ INSTALLED_APPS = (
     'student',
 )
 
-LOGIN_URL = "/login/"
-AUTH_PROFILE_MODULE = 'student.Student'
-GOOGLE_TOKEN = "767255874720-bo996qve1aicbhhvpkknmv588jed8b0e.apps.googleusercontent.com"
-GOOGLE_SECRET = "oaJd302pLOwGFcDgj0mzcmTL"
+
 
 
 

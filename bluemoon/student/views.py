@@ -27,7 +27,7 @@ FLOW = flow_from_clientsecrets(
     redirect_uri = 'http://carat.bluemoonscience.com/oauth2callback')
 
 
-@login_required
+
 def index(request):
   storage = Storage(CredentialsModel, 'id', request.user, 'credential')
   credential = storage.get()

@@ -50,7 +50,6 @@ def index(request):
                 })
 
 
-@login_required
 def auth_return(request):
   if not xsrfutil.validate_token(settings.SECRET_KEY, request.REQUEST['state'],
                                  request.user):

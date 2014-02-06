@@ -5,7 +5,7 @@ class LessonAdmin(admin.ModelAdmin):
     fieldsets = [
 	('Class Title', {'fields': ['title']}),
 	('classes', {'fields': ['classes']}),
-	('date', {'fields': ['date']}),
+	('Lesson Number', {'fields': ['lessonNumber']}),
     ('webPage', {'fields': ['htmlStuff']}),
   ]
 

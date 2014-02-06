@@ -11,7 +11,7 @@ class Lesson(models.Model):
         return self.title
     title = models.CharField(max_length = 200)
     classes = models.ManyToManyField(Class)
-    date = models.DateField(blank = True)
+    lessonNumber = models.DecimalField(decimal_places = 1, max_digits = 5)
     htmlStuff = models.TextField(blank = True)
 
     def display_safeHTML(self):

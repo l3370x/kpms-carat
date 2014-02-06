@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('student.views',
 			url(r'^student/$', 'studentHome'),
+			url(r'^driveopen/$', 'studentHome'),
 			url(r'^allClasses/$', 'allClasses'),
 			url(r'^class/(?P<classID>\d+)/$', 'classInfo'),
 			url(r'^lesson/(?P<lessonID>\d+)/$', 'lessonPage'),

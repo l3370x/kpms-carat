@@ -7,7 +7,7 @@ import os
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 locHost = False
 if 'aaronm3' in ROOT_PATH:
-	basepath= 'C:/Users/aaronm3/Documents/GitHub/kpms-carat'
+	basepath = 'C:/Users/aaronm3/Documents/GitHub/kpms-carat'
 	locHost = True
 elif 'aaron' in ROOT_PATH:
 	basepath = '/home/aaron/schoolSite/kpms-carat'
@@ -46,6 +46,10 @@ if locHost:
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+# if locHost:
+# 	ALLOWED_HOSTS = ["localhost", "*"]
+# else:
+# 	ALLOWED_HOSTS = []
 ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
@@ -127,6 +131,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
 
 ROOT_URLCONF = 'bluemoon.urls'
 

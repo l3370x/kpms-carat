@@ -38,7 +38,7 @@ def classInfo(request, classID):
 		raise Http404
 	d = buildDict(Student.objects.get(user = request.user.id))
 	d['theClass'] = theClass
-	d['theLessons'] = Lesson.objects.filter(classes = theClass).order_by('date')
+	d['theLessons'] = Lesson.objects.filter(classes = theClass).order_by('lessonNumber')
 	return render(request, 'student/class.html', d)
 
 @login_required
@@ -53,7 +53,7 @@ def allClasses(request):
 def startPage(request):
 	if request.user.is_authenticated():
 		if request.user.groups.filter(name = 'Admin').count():
-			logout(request)
+			django.contrib.auth.logout(request)
 			return login(request)
 		if request.user.groups.filter(name = 'Teacher').count():
 			return teacher2Home(request, request.user)
@@ -65,6 +65,7 @@ def teacher2Home(request, teacherUser):
 	theTeacher = Teacher.objects.get(user = teacherUser.id)
 	return redirect('/teacher', {'theTeacher':theTeacher})
 
+@login_required
 def logout(request):
 	django.contrib.auth.logout(request)
 	return startPage(request)
@@ -91,6 +92,12 @@ def login(request):
 		django.contrib.auth.login(request, user)
 		if user.groups.filter(name = 'Teacher').count():
 			return teacher2Home(request, user)
+		if user.is_staff:
+			django.contrib.auth.logout(request)
+			return render_to_response('auth/login.html',
+									  {'form':form,
+									   'error': 'use carat.bluemoonscience.com/admin for Admin login'},
+									  context_instance = RequestContext(request))
 		return student2Home(request, user)
 
 @login_required

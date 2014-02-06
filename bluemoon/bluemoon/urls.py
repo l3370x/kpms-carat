@@ -9,5 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'student.views.index'),
+	url(r'^oauth2callback', 'student.views.auth_return'),
 	url(r'^', include('student.urls')),
 )

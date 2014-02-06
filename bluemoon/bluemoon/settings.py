@@ -155,10 +155,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'student',
-    'teacher',
-    'course',
-    'lesson',
 )
+
+LOGIN_URL = "/login/"
+AUTH_PROFILE_MODULE = 'student.Student'
 
 
 

@@ -4,10 +4,8 @@ from django.contrib import admin
 class StudentAdmin(admin.ModelAdmin):
   fieldsets = [
 	('User Info', {'fields': ['user']}),
-	('first name', {'fields': ['first_name']}),
-	('last name', {'fields': ['last_name']}),
-	('email', {'fields': ['email']}),
-    ('classes', {'fields': ['classes']}),
+	('oauth token', {'fields': ['oauth_token']}),
+	('oauth secret', {'fields': ['oauth_secret']}),
   ]
   readonly_fields = ('user',)
 

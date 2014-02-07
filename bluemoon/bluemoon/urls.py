@@ -12,5 +12,5 @@ urlpatterns = patterns('',
     (r'^accounts/login/$', 'django.contrib.auth.views.login',
                         {'template_name': 'student/login.html'}),
 	url(r'^oauth2callback', 'student.views.auth_return'),
-	url(r'^$', 'student.views.index'),
+	url(r'^', 'student.views.index'),
 )

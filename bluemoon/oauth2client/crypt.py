@@ -112,7 +112,7 @@ try:
       return crypto.sign(self._key, message, 'sha256')
 
     @staticmethod
-    def from_string(key, password='notasecret'):
+    def from_string(key, password = 'notasecret'):
       """Construct a Signer instance from a string.
 
       Args:
@@ -217,7 +217,7 @@ try:
       return PKCS1_v1_5.new(self._key).sign(SHA256.new(message))
 
     @staticmethod
-    def from_string(key, password='notasecret'):
+    def from_string(key, password = 'notasecret'):
       """Construct a Signer instance from a string.
 
       Args:

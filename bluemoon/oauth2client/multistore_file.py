@@ -74,7 +74,7 @@ class NewerCredentialStoreError(Error):
 
 @util.positional(4)
 def get_credential_storage(filename, client_id, user_agent, scope,
-                           warn_on_readonly=True):
+                           warn_on_readonly = True):
   """Get a Storage instance for a credential.
 
   Args:
@@ -92,12 +92,12 @@ def get_credential_storage(filename, client_id, user_agent, scope,
   key = {'clientId': client_id, 'userAgent': user_agent,
          'scope': util.scopes_to_string(scope)}
   return get_credential_storage_custom_key(
-      filename, key, warn_on_readonly=warn_on_readonly)
+      filename, key, warn_on_readonly = warn_on_readonly)
 
 
 @util.positional(2)
 def get_credential_storage_custom_string_key(
-    filename, key_string, warn_on_readonly=True):
+    filename, key_string, warn_on_readonly = True):
   """Get a Storage instance for a credential using a single string as a key.
 
   Allows you to provide a string as a custom key that will be used for
@@ -115,12 +115,12 @@ def get_credential_storage_custom_string_key(
   # Create a key dictionary that can be used
   key_dict = {'key': key_string}
   return get_credential_storage_custom_key(
-      filename, key_dict, warn_on_readonly=warn_on_readonly)
+      filename, key_dict, warn_on_readonly = warn_on_readonly)
 
 
 @util.positional(2)
 def get_credential_storage_custom_key(
-    filename, key_dict, warn_on_readonly=True):
+    filename, key_dict, warn_on_readonly = True):
   """Get a Storage instance for a credential using a dictionary as a key.
 
   Allows you to provide a dictionary as a custom key that will be used for
@@ -137,13 +137,13 @@ def get_credential_storage_custom_key(
     An object derived from client.Storage for getting/setting the
     credential.
   """
-  multistore = _get_multistore(filename, warn_on_readonly=warn_on_readonly)
+  multistore = _get_multistore(filename, warn_on_readonly = warn_on_readonly)
   key = util.dict_to_tuple_key(key_dict)
   return multistore._get_storage(key)
 
 
 @util.positional(1)
-def get_all_credential_keys(filename, warn_on_readonly=True):
+def get_all_credential_keys(filename, warn_on_readonly = True):
   """Gets all the registered credential keys in the given Multistore.
 
   Args:
@@ -155,7 +155,7 @@ def get_all_credential_keys(filename, warn_on_readonly=True):
     dictionaries that can be passed into get_credential_storage_custom_key to
     get the actual credentials.
   """
-  multistore = _get_multistore(filename, warn_on_readonly=warn_on_readonly)
+  multistore = _get_multistore(filename, warn_on_readonly = warn_on_readonly)
   multistore._lock()
   try:
     return multistore._get_all_credential_keys()
@@ -164,7 +164,7 @@ def get_all_credential_keys(filename, warn_on_readonly=True):
 
 
 @util.positional(1)
-def _get_multistore(filename, warn_on_readonly=True):
+def _get_multistore(filename, warn_on_readonly = True):
   """A helper method to initialize the multistore with proper locking.
 
   Args:
@@ -178,7 +178,7 @@ def _get_multistore(filename, warn_on_readonly=True):
   _multistores_lock.acquire()
   try:
     multistore = _multistores.setdefault(
-        filename, _MultiStore(filename, warn_on_readonly=warn_on_readonly))
+        filename, _MultiStore(filename, warn_on_readonly = warn_on_readonly))
   finally:
     _multistores_lock.release()
   return multistore
@@ -188,7 +188,7 @@ class _MultiStore(object):
   """A file backed store for multiple credentials."""
 
   @util.positional(2)
-  def __init__(self, filename, warn_on_readonly=True):
+  def __init__(self, filename, warn_on_readonly = True):
     """Initialize the class.
 
     This will create the file if necessary.
@@ -329,7 +329,7 @@ class _MultiStore(object):
     if self._read_only:
       return
     self._file.file_handle().seek(0)
-    simplejson.dump(data, self._file.file_handle(), sort_keys=True, indent=2)
+    simplejson.dump(data, self._file.file_handle(), sort_keys = True, indent = 2)
     self._file.file_handle().truncate()
 
   def _refresh_data_cache(self):
@@ -372,7 +372,7 @@ class _MultiStore(object):
         self._data[key] = credential
       except:
         # If something goes wrong loading a credential, just ignore it
-        logger.info('Error decoding credential, skipping', exc_info=True)
+        logger.info('Error decoding credential, skipping', exc_info = True)
 
   def _decode_credential_from_json(self, cred_entry):
     """Load a credential from our JSON serialization.

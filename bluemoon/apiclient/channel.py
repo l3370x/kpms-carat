@@ -79,11 +79,11 @@ CHANNEL_PARAMS = {
     'token': 'token',
     }
 
-X_GOOG_CHANNEL_ID     = 'X-GOOG-CHANNEL-ID'
+X_GOOG_CHANNEL_ID = 'X-GOOG-CHANNEL-ID'
 X_GOOG_MESSAGE_NUMBER = 'X-GOOG-MESSAGE-NUMBER'
 X_GOOG_RESOURCE_STATE = 'X-GOOG-RESOURCE-STATE'
-X_GOOG_RESOURCE_URI   = 'X-GOOG-RESOURCE-URI'
-X_GOOG_RESOURCE_ID    = 'X-GOOG-RESOURCE-ID'
+X_GOOG_RESOURCE_URI = 'X-GOOG-RESOURCE-URI'
+X_GOOG_RESOURCE_ID = 'X-GOOG-RESOURCE-ID'
 
 
 def _upper_header_keys(headers):
@@ -148,8 +148,8 @@ class Channel(object):
   """
 
   @util.positional(5)
-  def __init__(self, type, id, token, address, expiration=None,
-               params=None, resource_id="", resource_uri=""):
+  def __init__(self, type, id, token, address, expiration = None,
+               params = None, resource_id = "", resource_uri = ""):
     """Create a new Channel.
 
     In user code, this Channel constructor will not typically be called
@@ -254,7 +254,7 @@ def notification_from_headers(channel, headers):
 
 
 @util.positional(2)
-def new_webhook_channel(url, token=None, expiration=None, params=None):
+def new_webhook_channel(url, token = None, expiration = None, params = None):
     """Create a new webhook Channel.
 
     Args:
@@ -274,12 +274,12 @@ def new_webhook_channel(url, token=None, expiration=None, params=None):
     expiration_ms = 0
     if expiration:
       delta = expiration - EPOCH
-      expiration_ms = delta.microseconds/1000 + (
-          delta.seconds + delta.days*24*3600)*1000
+      expiration_ms = delta.microseconds / 1000 + (
+          delta.seconds + delta.days * 24 * 3600) * 1000
       if expiration_ms < 0:
         expiration_ms = 0
 
     return Channel('web_hook', str(uuid.uuid4()),
-                   token, url, expiration=expiration_ms,
-                   params=params)
+                   token, url, expiration = expiration_ms,
+                   params = params)
 

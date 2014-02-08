@@ -55,17 +55,17 @@ with information from the APIs Console <https://code.google.com/apis/console>.
 # run_parser is an ArgumentParser that contains command-line options expected
 # by tools.run(). Pass it in as part of the 'parents' argument to your own
 # ArgumentParser.
-argparser = argparse.ArgumentParser(add_help=False)
-argparser.add_argument('--auth_host_name', default='localhost',
-                        help='Hostname when running a local web server.')
-argparser.add_argument('--noauth_local_webserver', action='store_true',
-                        default=False, help='Do not run a local web server.')
-argparser.add_argument('--auth_host_port', default=[8080, 8090], type=int,
-                        nargs='*', help='Port web server should listen on.')
-argparser.add_argument('--logging_level', default='ERROR',
-                        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR',
+argparser = argparse.ArgumentParser(add_help = False)
+argparser.add_argument('--auth_host_name', default = 'localhost',
+                        help = 'Hostname when running a local web server.')
+argparser.add_argument('--noauth_local_webserver', action = 'store_true',
+                        default = False, help = 'Do not run a local web server.')
+argparser.add_argument('--auth_host_port', default = [8080, 8090], type = int,
+                        nargs = '*', help = 'Port web server should listen on.')
+argparser.add_argument('--logging_level', default = 'ERROR',
+                        choices = ['DEBUG', 'INFO', 'WARNING', 'ERROR',
                                  'CRITICAL'],
-                        help='Set the logging level of detail.')
+                        help = 'Set the logging level of detail.')
 
 
 class ClientRedirectServer(BaseHTTPServer.HTTPServer):
@@ -107,7 +107,7 @@ class ClientRedirectHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 @util.positional(3)
-def run_flow(flow, storage, flags, http=None):
+def run_flow(flow, storage, flags, http = None):
   """Core code for a command-line application.
 
   The run() function is called from your application and runs through all the
@@ -186,7 +186,7 @@ def run_flow(flow, storage, flags, http=None):
   authorize_url = flow.step1_get_authorize_url()
 
   if not flags.noauth_local_webserver:
-    webbrowser.open(authorize_url, new=1, autoraise=True)
+    webbrowser.open(authorize_url, new = 1, autoraise = True)
     print 'Your browser has been opened to visit:'
     print
     print '    ' + authorize_url
@@ -216,7 +216,7 @@ def run_flow(flow, storage, flags, http=None):
     code = raw_input('Enter verification code: ').strip()
 
   try:
-    credential = flow.step2_exchange(code, http=http)
+    credential = flow.step2_exchange(code, http = http)
   except client.FlowExchangeError, e:
     sys.exit('Authentication has failed: %s' % e)
 

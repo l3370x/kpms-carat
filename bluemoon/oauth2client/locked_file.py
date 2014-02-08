@@ -133,7 +133,7 @@ class _PosixOpener(_Opener):
     while True:
       try:
         self._lock_fd = os.open(lock_filename,
-                                os.O_CREAT|os.O_EXCL|os.O_RDWR)
+                                os.O_CREAT | os.O_EXCL | os.O_RDWR)
         self._locked = True
         break
 
@@ -279,7 +279,7 @@ try:
           hfile = win32file._get_osfhandle(self._fh.fileno())
           win32file.LockFileEx(
               hfile,
-              (win32con.LOCKFILE_FAIL_IMMEDIATELY|
+              (win32con.LOCKFILE_FAIL_IMMEDIATELY |
                win32con.LOCKFILE_EXCLUSIVE_LOCK), 0, -0x10000,
               pywintypes.OVERLAPPED())
           self._locked = True
@@ -322,7 +322,7 @@ class LockedFile(object):
   """Represent a file that has exclusive access."""
 
   @util.positional(4)
-  def __init__(self, filename, mode, fallback_mode, use_native_locking=True):
+  def __init__(self, filename, mode, fallback_mode, use_native_locking = True):
     """Construct a LockedFile.
 
     Args:
@@ -355,7 +355,7 @@ class LockedFile(object):
     """Return whether we successfully locked the file."""
     return self._opener.is_locked()
 
-  def open_and_lock(self, timeout=0, delay=0.05):
+  def open_and_lock(self, timeout = 0, delay = 0.05):
     """Open the file, trying to lock it.
 
     Args:

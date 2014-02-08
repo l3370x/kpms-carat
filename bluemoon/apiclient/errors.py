@@ -36,7 +36,7 @@ class HttpError(Error):
   """HTTP data was invalid or unexpected."""
 
   @util.positional(3)
-  def __init__(self, resp, content, uri=None):
+  def __init__(self, resp, content, uri = None):
     self.resp = resp
     self.content = content
     self.uri = uri
@@ -110,7 +110,7 @@ class BatchError(HttpError):
   """Error occured during batch operations."""
 
   @util.positional(2)
-  def __init__(self, reason, resp=None, content=None):
+  def __init__(self, reason, resp = None, content = None):
     self.resp = resp
     self.content = content
     self.reason = reason
@@ -125,7 +125,7 @@ class UnexpectedMethodError(Error):
   """Exception raised by RequestMockBuilder on unexpected calls."""
 
   @util.positional(1)
-  def __init__(self, methodId=None):
+  def __init__(self, methodId = None):
     """Constructor for an UnexpectedMethodError."""
     super(UnexpectedMethodError, self).__init__(
         'Received unexpected call %s' % methodId)

@@ -108,7 +108,7 @@ def _loadfile(filename):
   return _validate_clientsecrets(obj)
 
 
-def loadfile(filename, cache=None):
+def loadfile(filename, cache = None):
   """Loading of client_secrets JSON file, optionally backed by a cache.
 
   Typical cache storage would be App Engine memcache service,
@@ -144,10 +144,10 @@ def loadfile(filename, cache=None):
   if not cache:
     return _loadfile(filename)
 
-  obj = cache.get(filename, namespace=_SECRET_NAMESPACE)
+  obj = cache.get(filename, namespace = _SECRET_NAMESPACE)
   if obj is None:
     client_type, client_info = _loadfile(filename)
     obj = {client_type: client_info}
-    cache.set(filename, obj, namespace=_SECRET_NAMESPACE)
+    cache.set(filename, obj, namespace = _SECRET_NAMESPACE)
 
   return obj.iteritems().next()

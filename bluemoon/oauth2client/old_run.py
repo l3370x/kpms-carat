@@ -45,7 +45,7 @@ gflags.DEFINE_multi_int('auth_host_port', [8080, 8090],
 
 
 @util.positional(2)
-def run(flow, storage, http=None):
+def run(flow, storage, http = None):
   """Core code for a command-line application.
 
   The run() function is called from your application and runs through all
@@ -119,7 +119,7 @@ def run(flow, storage, http=None):
   authorize_url = flow.step1_get_authorize_url()
 
   if FLAGS.auth_local_webserver:
-    webbrowser.open(authorize_url, new=1, autoraise=True)
+    webbrowser.open(authorize_url, new = 1, autoraise = True)
     print 'Your browser has been opened to visit:'
     print
     print '    ' + authorize_url
@@ -149,7 +149,7 @@ def run(flow, storage, http=None):
     code = raw_input('Enter verification code: ').strip()
 
   try:
-    credential = flow.step2_exchange(code, http=http)
+    credential = flow.step2_exchange(code, http = http)
   except client.FlowExchangeError, e:
     sys.exit('Authentication has failed: %s' % e)
 

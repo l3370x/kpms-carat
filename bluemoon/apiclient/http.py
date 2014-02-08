@@ -52,7 +52,7 @@ from oauth2client import util
 from oauth2client.anyjson import simplejson
 
 
-DEFAULT_CHUNK_SIZE = 512*1024
+DEFAULT_CHUNK_SIZE = 512 * 1024
 
 MAX_URI_LENGTH = 2048
 
@@ -204,7 +204,7 @@ class MediaUpload(object):
     raise NotImplementedError()
 
   @util.positional(1)
-  def _to_json(self, strip=None):
+  def _to_json(self, strip = None):
     """Utility function for creating a JSON representation of a MediaUpload.
 
     Args:
@@ -247,7 +247,7 @@ class MediaUpload(object):
     data = simplejson.loads(s)
     # Find and call the right classmethod from_json() to restore the object.
     module = data['_module']
-    m = __import__(module, fromlist=module.split('.')[:-1])
+    m = __import__(module, fromlist = module.split('.')[:-1])
     kls = getattr(m, data['_class'])
     from_json = getattr(kls, 'from_json')
     return from_json(s)
@@ -277,8 +277,8 @@ class MediaIoBaseUpload(MediaUpload):
   """
 
   @util.positional(3)
-  def __init__(self, fd, mimetype, chunksize=DEFAULT_CHUNK_SIZE,
-      resumable=False):
+  def __init__(self, fd, mimetype, chunksize = DEFAULT_CHUNK_SIZE,
+      resumable = False):
     """Constructor.
 
     Args:
@@ -402,8 +402,8 @@ class MediaFileUpload(MediaIoBaseUpload):
   """
 
   @util.positional(2)
-  def __init__(self, filename, mimetype=None, chunksize=DEFAULT_CHUNK_SIZE,
-               resumable=False):
+  def __init__(self, filename, mimetype = None, chunksize = DEFAULT_CHUNK_SIZE,
+               resumable = False):
     """Constructor.
 
     Args:
@@ -422,8 +422,8 @@ class MediaFileUpload(MediaIoBaseUpload):
     fd = open(self._filename, 'rb')
     if mimetype is None:
       (mimetype, encoding) = mimetypes.guess_type(filename)
-    super(MediaFileUpload, self).__init__(fd, mimetype, chunksize=chunksize,
-                                          resumable=resumable)
+    super(MediaFileUpload, self).__init__(fd, mimetype, chunksize = chunksize,
+                                          resumable = resumable)
 
   def to_json(self):
     """Creating a JSON representation of an instance of MediaFileUpload.
@@ -432,13 +432,13 @@ class MediaFileUpload(MediaIoBaseUpload):
        string, a JSON representation of this instance, suitable to pass to
        from_json().
     """
-    return self._to_json(strip=['_fd'])
+    return self._to_json(strip = ['_fd'])
 
   @staticmethod
   def from_json(s):
     d = simplejson.loads(s)
-    return MediaFileUpload(d['_filename'], mimetype=d['_mimetype'],
-                           chunksize=d['_chunksize'], resumable=d['_resumable'])
+    return MediaFileUpload(d['_filename'], mimetype = d['_mimetype'],
+                           chunksize = d['_chunksize'], resumable = d['_resumable'])
 
 
 class MediaInMemoryUpload(MediaIoBaseUpload):
@@ -449,8 +449,8 @@ class MediaInMemoryUpload(MediaIoBaseUpload):
   """
 
   @util.positional(2)
-  def __init__(self, body, mimetype='application/octet-stream',
-               chunksize=DEFAULT_CHUNK_SIZE, resumable=False):
+  def __init__(self, body, mimetype = 'application/octet-stream',
+               chunksize = DEFAULT_CHUNK_SIZE, resumable = False):
     """Create a new MediaInMemoryUpload.
 
   DEPRECATED: Use MediaIoBaseUpload with either io.TextIOBase or StringIO for
@@ -466,8 +466,8 @@ class MediaInMemoryUpload(MediaIoBaseUpload):
       in a single request.
     """
     fd = StringIO.StringIO(body)
-    super(MediaInMemoryUpload, self).__init__(fd, mimetype, chunksize=chunksize,
-                                              resumable=resumable)
+    super(MediaInMemoryUpload, self).__init__(fd, mimetype, chunksize = chunksize,
+                                              resumable = resumable)
 
 
 class MediaIoBaseDownload(object):
@@ -491,7 +491,7 @@ class MediaIoBaseDownload(object):
   """
 
   @util.positional(3)
-  def __init__(self, fd, request, chunksize=DEFAULT_CHUNK_SIZE):
+  def __init__(self, fd, request, chunksize = DEFAULT_CHUNK_SIZE):
     """Constructor.
 
     Args:
@@ -514,7 +514,7 @@ class MediaIoBaseDownload(object):
     self._rand = random.random
 
   @util.positional(1)
-  def next_chunk(self, num_retries=0):
+  def next_chunk(self, num_retries = 0):
     """Get the next chunk of the download.
 
     Args:
@@ -540,12 +540,12 @@ class MediaIoBaseDownload(object):
 
     for retry_num in xrange(num_retries + 1):
       if retry_num > 0:
-        self._sleep(self._rand() * 2**retry_num)
+        self._sleep(self._rand() * 2 ** retry_num)
         logging.warning(
             'Retry #%d for media download: GET %s, following status: %d'
             % (retry_num, self._uri, resp.status))
 
-      resp, content = http.request(self._uri, headers=headers)
+      resp, content = http.request(self._uri, headers = headers)
       if resp.status < 500:
         break
 
@@ -564,7 +564,7 @@ class MediaIoBaseDownload(object):
         self._done = True
       return MediaDownloadProgress(self._progress, self._total_size), self._done
     else:
-      raise HttpError(resp, content, uri=self._uri)
+      raise HttpError(resp, content, uri = self._uri)
 
 
 class _StreamSlice(object):
@@ -590,7 +590,7 @@ class _StreamSlice(object):
     self._chunksize = chunksize
     self._stream.seek(begin)
 
-  def read(self, n=-1):
+  def read(self, n = -1):
     """Read n bytes.
 
     Args:
@@ -612,11 +612,11 @@ class HttpRequest(object):
 
   @util.positional(4)
   def __init__(self, http, postproc, uri,
-               method='GET',
-               body=None,
-               headers=None,
-               methodId=None,
-               resumable=None):
+               method = 'GET',
+               body = None,
+               headers = None,
+               methodId = None,
+               resumable = None):
     """Constructor for an HttpRequest.
 
     Args:
@@ -660,7 +660,7 @@ class HttpRequest(object):
     self._sleep = time.sleep
 
   @util.positional(1)
-  def execute(self, http=None, num_retries=0):
+  def execute(self, http = None, num_retries = 0):
     """Execute the request.
 
     Args:
@@ -685,7 +685,7 @@ class HttpRequest(object):
     if self.resumable:
       body = None
       while body is None:
-        _, body = self.next_chunk(http=http, num_retries=num_retries)
+        _, body = self.next_chunk(http = http, num_retries = num_retries)
       return body
 
     # Non-resumable case.
@@ -708,19 +708,19 @@ class HttpRequest(object):
     # Handle retries for server-side errors.
     for retry_num in xrange(num_retries + 1):
       if retry_num > 0:
-        self._sleep(self._rand() * 2**retry_num)
+        self._sleep(self._rand() * 2 ** retry_num)
         logging.warning('Retry #%d for request: %s %s, following status: %d'
                         % (retry_num, self.method, self.uri, resp.status))
 
-      resp, content = http.request(str(self.uri), method=str(self.method),
-                                   body=self.body, headers=self.headers)
+      resp, content = http.request(str(self.uri), method = str(self.method),
+                                   body = self.body, headers = self.headers)
       if resp.status < 500:
         break
 
     for callback in self.response_callbacks:
       callback(resp)
     if resp.status >= 300:
-      raise HttpError(resp, content, uri=self.uri)
+      raise HttpError(resp, content, uri = self.uri)
     return self.postproc(resp, content)
 
   @util.positional(2)
@@ -736,7 +736,7 @@ class HttpRequest(object):
     self.response_callbacks.append(cb)
 
   @util.positional(1)
-  def next_chunk(self, http=None, num_retries=0):
+  def next_chunk(self, http = None, num_retries = 0):
     """Execute the next step of a resumable upload.
 
     Can only be used if the method being executed supports media uploads and
@@ -791,14 +791,14 @@ class HttpRequest(object):
 
       for retry_num in xrange(num_retries + 1):
         if retry_num > 0:
-          self._sleep(self._rand() * 2**retry_num)
+          self._sleep(self._rand() * 2 ** retry_num)
           logging.warning(
               'Retry #%d for resumable URI request: %s %s, following status: %d'
               % (retry_num, self.method, self.uri, resp.status))
 
-        resp, content = http.request(self.uri, method=self.method,
-                                     body=self.body,
-                                     headers=start_headers)
+        resp, content = http.request(self.uri, method = self.method,
+                                     body = self.body,
+                                     headers = start_headers)
         if resp.status < 500:
           break
 
@@ -815,7 +815,7 @@ class HttpRequest(object):
           'content-length': '0'
           }
       resp, content = http.request(self.resumable_uri, 'PUT',
-                                   headers=headers)
+                                   headers = headers)
       status, body = self._process_response(resp, content)
       if body:
         # The upload was complete.
@@ -856,15 +856,15 @@ class HttpRequest(object):
 
     for retry_num in xrange(num_retries + 1):
       if retry_num > 0:
-        self._sleep(self._rand() * 2**retry_num)
+        self._sleep(self._rand() * 2 ** retry_num)
         logging.warning(
             'Retry #%d for media upload: %s %s, following status: %d'
             % (retry_num, self.method, self.uri, resp.status))
 
       try:
-        resp, content = http.request(self.resumable_uri, method='PUT',
-                                     body=data,
-                                     headers=headers)
+        resp, content = http.request(self.resumable_uri, method = 'PUT',
+                                     body = data,
+                                     headers = headers)
       except:
         self._in_error_state = True
         raise
@@ -898,7 +898,7 @@ class HttpRequest(object):
         self.resumable_uri = resp['location']
     else:
       self._in_error_state = True
-      raise HttpError(resp, content, uri=self.uri)
+      raise HttpError(resp, content, uri = self.uri)
 
     return (MediaUploadProgress(self.resumable_progress, self.resumable.size()),
             None)
@@ -924,12 +924,12 @@ class HttpRequest(object):
     return HttpRequest(
         http,
         postproc,
-        uri=d['uri'],
-        method=d['method'],
-        body=d['body'],
-        headers=d['headers'],
-        methodId=d['methodId'],
-        resumable=d['resumable'])
+        uri = d['uri'],
+        method = d['method'],
+        body = d['body'],
+        headers = d['headers'],
+        methodId = d['methodId'],
+        resumable = d['resumable'])
 
 
 class BatchHttpRequest(object):
@@ -966,7 +966,7 @@ class BatchHttpRequest(object):
   """
 
   @util.positional(1)
-  def __init__(self, callback=None, batch_uri=None):
+  def __init__(self, callback = None, batch_uri = None):
     """Constructor for a BatchHttpRequest.
 
     Args:
@@ -1110,8 +1110,8 @@ class BatchHttpRequest(object):
     # Serialize the mime message.
     fp = StringIO.StringIO()
     # maxheaderlen=0 means don't line wrap headers.
-    g = Generator(fp, maxheaderlen=0)
-    g.flatten(msg, unixfrom=False)
+    g = Generator(fp, maxheaderlen = 0)
+    g.flatten(msg, unixfrom = False)
     body = fp.getvalue()
 
     # Strip off the \n\n that the MIME lib tacks onto the end of the payload.
@@ -1162,7 +1162,7 @@ class BatchHttpRequest(object):
     return str(self._last_auto_id)
 
   @util.positional(2)
-  def add(self, request, callback=None, request_id=None):
+  def add(self, request, callback = None, request_id = None):
     """Add a new request.
 
     Every callback added will be paired with a unique id, the request_id. That
@@ -1235,11 +1235,11 @@ class BatchHttpRequest(object):
     headers['content-type'] = ('multipart/mixed; '
                                'boundary="%s"') % message.get_boundary()
 
-    resp, content = http.request(self._batch_uri, method='POST', body=body,
-                                 headers=headers)
+    resp, content = http.request(self._batch_uri, method = 'POST', body = body,
+                                 headers = headers)
 
     if resp.status >= 300:
-      raise HttpError(resp, content, uri=self._batch_uri)
+      raise HttpError(resp, content, uri = self._batch_uri)
 
     # Now break out the individual responses and store each one.
     boundary, _ = content.split(None, 1)
@@ -1253,8 +1253,8 @@ class BatchHttpRequest(object):
     mime_response = parser.close()
 
     if not mime_response.is_multipart():
-      raise BatchError("Response not in multipart/mixed format.", resp=resp,
-                       content=content)
+      raise BatchError("Response not in multipart/mixed format.", resp = resp,
+                       content = content)
 
     for part in mime_response.get_payload():
       request_id = self._header_to_id(part['Content-ID'])
@@ -1262,7 +1262,7 @@ class BatchHttpRequest(object):
       self._responses[request_id] = (response, content)
 
   @util.positional(1)
-  def execute(self, http=None):
+  def execute(self, http = None):
     """Execute all the requests as a single batched HTTP request.
 
     Args:
@@ -1321,7 +1321,7 @@ class BatchHttpRequest(object):
       exception = None
       try:
         if resp.status >= 300:
-          raise HttpError(resp, content, uri=request.uri)
+          raise HttpError(resp, content, uri = request.uri)
         response = request.postproc(resp, content)
       except HttpError, e:
         exception = e
@@ -1355,7 +1355,7 @@ class HttpRequestMock(object):
     if 'reason' in self.resp:
       self.resp.reason = self.resp['reason']
 
-  def execute(self, http=None):
+  def execute(self, http = None):
     """Execute the request.
 
     Same behavior as HttpRequest.execute(), but the response is
@@ -1391,7 +1391,7 @@ class RequestMockBuilder(object):
     For more details see the project wiki.
   """
 
-  def __init__(self, responses, check_unexpected=False):
+  def __init__(self, responses, check_unexpected = False):
     """Constructor for RequestMockBuilder
 
     The constructed object should be a callable object
@@ -1407,8 +1407,8 @@ class RequestMockBuilder(object):
     self.responses = responses
     self.check_unexpected = check_unexpected
 
-  def __call__(self, http, postproc, uri, method='GET', body=None,
-               headers=None, methodId=None, resumable=None):
+  def __call__(self, http, postproc, uri, method = 'GET', body = None,
+               headers = None, methodId = None, resumable = None):
     """Implements the callable interface that discovery.build() expects
     of requestBuilder, which is to build an object compatible with
     HttpRequest.execute(). See that method for the description of the
@@ -1431,7 +1431,7 @@ class RequestMockBuilder(object):
           raise UnexpectedBodyError(expected_body, body)
       return HttpRequestMock(resp, content, postproc)
     elif self.check_unexpected:
-      raise UnexpectedMethodError(methodId=methodId)
+      raise UnexpectedMethodError(methodId = methodId)
     else:
       model = JsonModel(False)
       return HttpRequestMock(None, '{}', model.response)
@@ -1440,7 +1440,7 @@ class RequestMockBuilder(object):
 class HttpMock(object):
   """Mock of httplib2.Http"""
 
-  def __init__(self, filename=None, headers=None):
+  def __init__(self, filename = None, headers = None):
     """
     Args:
       filename: string, absolute filename to read response from
@@ -1463,11 +1463,11 @@ class HttpMock(object):
 
 
   def request(self, uri,
-              method='GET',
-              body=None,
-              headers=None,
-              redirections=1,
-              connection_type=None):
+              method = 'GET',
+              body = None,
+              headers = None,
+              redirections = 1,
+              connection_type = None):
     self.uri = uri
     self.method = method
     self.body = body
@@ -1508,11 +1508,11 @@ class HttpMockSequence(object):
     self.follow_redirects = True
 
   def request(self, uri,
-              method='GET',
-              body=None,
-              headers=None,
-              redirections=1,
-              connection_type=None):
+              method = 'GET',
+              body = None,
+              headers = None,
+              redirections = 1,
+              connection_type = None):
     resp, content = self._iterable.pop(0)
     if content == 'echo_request_headers':
       content = headers
@@ -1550,9 +1550,9 @@ def set_user_agent(http, user_agent):
   request_orig = http.request
 
   # The closure that will replace 'httplib2.Http.request'.
-  def new_request(uri, method='GET', body=None, headers=None,
-                  redirections=httplib2.DEFAULT_MAX_REDIRECTS,
-                  connection_type=None):
+  def new_request(uri, method = 'GET', body = None, headers = None,
+                  redirections = httplib2.DEFAULT_MAX_REDIRECTS,
+                  connection_type = None):
     """Modify the request headers to add the user-agent."""
     if headers is None:
       headers = {}
@@ -1589,9 +1589,9 @@ def tunnel_patch(http):
   request_orig = http.request
 
   # The closure that will replace 'httplib2.Http.request'.
-  def new_request(uri, method='GET', body=None, headers=None,
-                  redirections=httplib2.DEFAULT_MAX_REDIRECTS,
-                  connection_type=None):
+  def new_request(uri, method = 'GET', body = None, headers = None,
+                  redirections = httplib2.DEFAULT_MAX_REDIRECTS,
+                  connection_type = None):
     """Modify the request headers to add the user-agent."""
     if headers is None:
       headers = {}

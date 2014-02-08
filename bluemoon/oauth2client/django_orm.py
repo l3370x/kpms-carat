@@ -46,7 +46,7 @@ class CredentialsField(models.Field):
       return value
     return pickle.loads(base64.b64decode(value))
 
-  def get_db_prep_value(self, value, connection, prepared=False):
+  def get_db_prep_value(self, value, connection, prepared = False):
     if value is None:
       return None
     return base64.b64encode(pickle.dumps(value))
@@ -71,7 +71,7 @@ class FlowField(models.Field):
       return value
     return pickle.loads(base64.b64decode(value))
 
-  def get_db_prep_value(self, value, connection, prepared=False):
+  def get_db_prep_value(self, value, connection, prepared = False):
     if value is None:
       return None
     return base64.b64encode(pickle.dumps(value))

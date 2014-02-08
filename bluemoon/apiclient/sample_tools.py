@@ -31,7 +31,7 @@ from oauth2client import file
 from oauth2client import tools
 
 
-def init(argv, name, version, doc, filename, scope=None, parents=[]):
+def init(argv, name, version, doc, filename, scope = None, parents = []):
   """A common initialization routine for samples.
 
   Many of the sample applications do the same initialization, which has now
@@ -61,9 +61,9 @@ def init(argv, name, version, doc, filename, scope=None, parents=[]):
   parent_parsers = [tools.argparser]
   parent_parsers.extend(parents)
   parser = argparse.ArgumentParser(
-      description=doc,
-      formatter_class=argparse.RawDescriptionHelpFormatter,
-      parents=parent_parsers)
+      description = doc,
+      formatter_class = argparse.RawDescriptionHelpFormatter,
+      parents = parent_parsers)
   flags = parser.parse_args(argv[1:])
 
   # Name of a file containing the OAuth 2.0 information for this
@@ -75,8 +75,8 @@ def init(argv, name, version, doc, filename, scope=None, parents=[]):
 
   # Set up a Flow object to be used if we need to authenticate.
   flow = client.flow_from_clientsecrets(client_secrets,
-      scope=scope,
-      message=tools.message_if_missing(client_secrets))
+      scope = scope,
+      message = tools.message_if_missing(client_secrets))
 
   # Prepare credentials, and authorize HTTP object with them.
   # If the credentials don't exist or are invalid run through the native client
@@ -89,5 +89,5 @@ def init(argv, name, version, doc, filename, scope=None, parents=[]):
   http = credentials.authorize(http = httplib2.Http())
 
   # Construct a service object via the discovery service.
-  service = discovery.build(name, version, http=http)
+  service = discovery.build(name, version, http = http)
   return (service, flags)

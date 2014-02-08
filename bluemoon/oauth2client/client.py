@@ -223,7 +223,7 @@ class Credentials(object):
       module = module.replace('.apiclient', '')
       m = __import__(module)
 
-    m = __import__(module, fromlist=module.split('.')[:-1])
+    m = __import__(module, fromlist = module.split('.')[:-1])
     kls = getattr(m, data['_class'])
     from_json = getattr(kls, 'from_json')
     return from_json(s)
@@ -375,7 +375,7 @@ def _update_query_params(uri, params):
     The same URI but with the new query parameters added.
   """
   parts = list(urlparse.urlparse(uri))
-  query_params = dict(parse_qsl(parts[4])) # 4 is the index of the query part
+  query_params = dict(parse_qsl(parts[4]))  # 4 is the index of the query part
   query_params.update(params)
   parts[4] = urllib.urlencode(query_params)
   return urlparse.urlunparse(parts)
@@ -392,8 +392,8 @@ class OAuth2Credentials(Credentials):
 
   @util.positional(8)
   def __init__(self, access_token, client_id, client_secret, refresh_token,
-               token_expiry, token_uri, user_agent, revoke_uri=None,
-               id_token=None, token_response=None):
+               token_expiry, token_uri, user_agent, revoke_uri = None,
+               id_token = None, token_response = None):
     """Create an instance of OAuth2Credentials.
 
     This constructor is not usually called by the user, instead
@@ -467,9 +467,9 @@ class OAuth2Credentials(Credentials):
 
     # The closure that will replace 'httplib2.Http.request'.
     @util.positional(1)
-    def new_request(uri, method='GET', body=None, headers=None,
-                    redirections=httplib2.DEFAULT_MAX_REDIRECTS,
-                    connection_type=None):
+    def new_request(uri, method = 'GET', body = None, headers = None,
+                    redirections = httplib2.DEFAULT_MAX_REDIRECTS,
+                    connection_type = None):
       if not self.access_token:
         logger.info('Attempting refresh to obtain initial access_token')
         self._refresh(request_orig)
@@ -562,9 +562,9 @@ class OAuth2Credentials(Credentials):
         data['token_expiry'],
         data['token_uri'],
         data['user_agent'],
-        revoke_uri=data.get('revoke_uri', None),
-        id_token=data.get('id_token', None),
-        token_response=data.get('token_response', None))
+        revoke_uri = data.get('revoke_uri', None),
+        id_token = data.get('id_token', None),
+        token_response = data.get('token_response', None))
     retval.invalid = data['invalid']
     return retval
 
@@ -679,7 +679,7 @@ class OAuth2Credentials(Credentials):
 
     logger.info('Refreshing access_token')
     resp, content = http_request(
-        self.token_uri, method='POST', body=body, headers=headers)
+        self.token_uri, method = 'POST', body = body, headers = headers)
     if resp.status == 200:
       # TODO(jcgregorio) Raise an error if loads fails?
       d = simplejson.loads(content)
@@ -688,7 +688,7 @@ class OAuth2Credentials(Credentials):
       self.refresh_token = d.get('refresh_token', self.refresh_token)
       if 'expires_in' in d:
         self.token_expiry = datetime.timedelta(
-            seconds=int(d['expires_in'])) + datetime.datetime.utcnow()
+            seconds = int(d['expires_in'])) + datetime.datetime.utcnow()
       else:
         self.token_expiry = None
       if self.store:
@@ -775,7 +775,7 @@ class AccessTokenCredentials(OAuth2Credentials):
       revoked.
   """
 
-  def __init__(self, access_token, user_agent, revoke_uri=None):
+  def __init__(self, access_token, user_agent, revoke_uri = None):
     """Create an instance of OAuth2Credentials
 
     This is one of the few types if Credentials that you should contrust,
@@ -795,7 +795,7 @@ class AccessTokenCredentials(OAuth2Credentials):
         None,
         None,
         user_agent,
-        revoke_uri=revoke_uri)
+        revoke_uri = revoke_uri)
 
 
   @classmethod
@@ -832,9 +832,9 @@ class AssertionCredentials(OAuth2Credentials):
   """
 
   @util.positional(2)
-  def __init__(self, assertion_type, user_agent=None,
-               token_uri=GOOGLE_TOKEN_URI,
-               revoke_uri=GOOGLE_REVOKE_URI,
+  def __init__(self, assertion_type, user_agent = None,
+               token_uri = GOOGLE_TOKEN_URI,
+               revoke_uri = GOOGLE_REVOKE_URI,
                **unused_kwargs):
     """Constructor for AssertionFlowCredentials.
 
@@ -854,7 +854,7 @@ class AssertionCredentials(OAuth2Credentials):
         None,
         token_uri,
         user_agent,
-        revoke_uri=revoke_uri)
+        revoke_uri = revoke_uri)
     self.assertion_type = assertion_type
 
   def _generate_refresh_request_body(self):
@@ -899,17 +899,17 @@ if HAS_CRYPTO:
     later. For App Engine you may also consider using AppAssertionCredentials.
     """
 
-    MAX_TOKEN_LIFETIME_SECS = 3600 # 1 hour in seconds
+    MAX_TOKEN_LIFETIME_SECS = 3600  # 1 hour in seconds
 
     @util.positional(4)
     def __init__(self,
         service_account_name,
         private_key,
         scope,
-        private_key_password='notasecret',
-        user_agent=None,
-        token_uri=GOOGLE_TOKEN_URI,
-        revoke_uri=GOOGLE_REVOKE_URI,
+        private_key_password = 'notasecret',
+        user_agent = None,
+        token_uri = GOOGLE_TOKEN_URI,
+        revoke_uri = GOOGLE_REVOKE_URI,
         **kwargs):
       """Constructor for SignedJwtAssertionCredentials.
 
@@ -929,9 +929,9 @@ if HAS_CRYPTO:
 
       super(SignedJwtAssertionCredentials, self).__init__(
           None,
-          user_agent=user_agent,
-          token_uri=token_uri,
-          revoke_uri=revoke_uri,
+          user_agent = user_agent,
+          token_uri = token_uri,
+          revoke_uri = revoke_uri,
           )
 
       self.scope = util.scopes_to_string(scope)
@@ -950,9 +950,9 @@ if HAS_CRYPTO:
           data['service_account_name'],
           base64.b64decode(data['private_key']),
           data['scope'],
-          private_key_password=data['private_key_password'],
-          user_agent=data['user_agent'],
-          token_uri=data['token_uri'],
+          private_key_password = data['private_key_password'],
+          user_agent = data['user_agent'],
+          token_uri = data['token_uri'],
           **data['kwargs']
           )
       retval.invalid = data['invalid']
@@ -981,8 +981,8 @@ if HAS_CRYPTO:
   _cached_http = httplib2.Http(MemoryCache())
 
   @util.positional(2)
-  def verify_id_token(id_token, audience, http=None,
-      cert_uri=ID_TOKEN_VERIFICATON_CERTS):
+  def verify_id_token(id_token, audience, http = None,
+      cert_uri = ID_TOKEN_VERIFICATON_CERTS):
     """Verifies a signed JWT id_token.
 
     This function requires PyOpenSSL and because of that it does not work on
@@ -1071,10 +1071,10 @@ def _parse_exchange_token_response(content):
 
 @util.positional(4)
 def credentials_from_code(client_id, client_secret, scope, code,
-                          redirect_uri='postmessage', http=None,
-                          user_agent=None, token_uri=GOOGLE_TOKEN_URI,
-                          auth_uri=GOOGLE_AUTH_URI,
-                          revoke_uri=GOOGLE_REVOKE_URI):
+                          redirect_uri = 'postmessage', http = None,
+                          user_agent = None, token_uri = GOOGLE_TOKEN_URI,
+                          auth_uri = GOOGLE_AUTH_URI,
+                          revoke_uri = GOOGLE_REVOKE_URI):
   """Exchanges an authorization code for an OAuth2Credentials object.
 
   Args:
@@ -1101,20 +1101,20 @@ def credentials_from_code(client_id, client_secret, scope, code,
      access token
   """
   flow = OAuth2WebServerFlow(client_id, client_secret, scope,
-                             redirect_uri=redirect_uri, user_agent=user_agent,
-                             auth_uri=auth_uri, token_uri=token_uri,
-                             revoke_uri=revoke_uri)
+                             redirect_uri = redirect_uri, user_agent = user_agent,
+                             auth_uri = auth_uri, token_uri = token_uri,
+                             revoke_uri = revoke_uri)
 
-  credentials = flow.step2_exchange(code, http=http)
+  credentials = flow.step2_exchange(code, http = http)
   return credentials
 
 
 @util.positional(3)
 def credentials_from_clientsecrets_and_code(filename, scope, code,
                                             message = None,
-                                            redirect_uri='postmessage',
-                                            http=None,
-                                            cache=None):
+                                            redirect_uri = 'postmessage',
+                                            http = None,
+                                            cache = None):
   """Returns OAuth2Credentials from a clientsecrets file and an auth code.
 
   Will create the right kind of Flow based on the contents of the clientsecrets
@@ -1145,9 +1145,9 @@ def credentials_from_clientsecrets_and_code(filename, scope, code,
     clientsecrets.InvalidClientSecretsError if the clientsecrets file is
       invalid.
   """
-  flow = flow_from_clientsecrets(filename, scope, message=message, cache=cache,
-                                 redirect_uri=redirect_uri)
-  credentials = flow.step2_exchange(code, http=http)
+  flow = flow_from_clientsecrets(filename, scope, message = message, cache = cache,
+                                 redirect_uri = redirect_uri)
+  credentials = flow.step2_exchange(code, http = http)
   return credentials
 
 
@@ -1159,11 +1159,11 @@ class OAuth2WebServerFlow(Flow):
 
   @util.positional(4)
   def __init__(self, client_id, client_secret, scope,
-               redirect_uri=None,
-               user_agent=None,
-               auth_uri=GOOGLE_AUTH_URI,
-               token_uri=GOOGLE_TOKEN_URI,
-               revoke_uri=GOOGLE_REVOKE_URI,
+               redirect_uri = None,
+               user_agent = None,
+               auth_uri = GOOGLE_AUTH_URI,
+               token_uri = GOOGLE_TOKEN_URI,
+               revoke_uri = GOOGLE_REVOKE_URI,
                **kwargs):
     """Constructor for OAuth2WebServerFlow.
 
@@ -1204,7 +1204,7 @@ class OAuth2WebServerFlow(Flow):
     self.params.update(kwargs)
 
   @util.positional(1)
-  def step1_get_authorize_url(self, redirect_uri=None):
+  def step1_get_authorize_url(self, redirect_uri = None):
     """Returns a URI to redirect to the provider.
 
     Args:
@@ -1234,7 +1234,7 @@ class OAuth2WebServerFlow(Flow):
     return _update_query_params(self.auth_uri, query_params)
 
   @util.positional(2)
-  def step2_exchange(self, code, http=None):
+  def step2_exchange(self, code, http = None):
     """Exhanges a code for OAuth2Credentials.
 
     Args:
@@ -1279,8 +1279,8 @@ class OAuth2WebServerFlow(Flow):
     if http is None:
       http = httplib2.Http()
 
-    resp, content = http.request(self.token_uri, method='POST', body=body,
-                                 headers=headers)
+    resp, content = http.request(self.token_uri, method = 'POST', body = body,
+                                 headers = headers)
     d = _parse_exchange_token_response(content)
     if resp.status == 200 and 'access_token' in d:
       access_token = d['access_token']
@@ -1288,7 +1288,7 @@ class OAuth2WebServerFlow(Flow):
       token_expiry = None
       if 'expires_in' in d:
         token_expiry = datetime.datetime.utcnow() + datetime.timedelta(
-            seconds=int(d['expires_in']))
+            seconds = int(d['expires_in']))
 
       if 'id_token' in d:
         d['id_token'] = _extract_id_token(d['id_token'])
@@ -1297,9 +1297,9 @@ class OAuth2WebServerFlow(Flow):
       return OAuth2Credentials(access_token, self.client_id,
                                self.client_secret, refresh_token, token_expiry,
                                self.token_uri, self.user_agent,
-                               revoke_uri=self.revoke_uri,
-                               id_token=d.get('id_token', None),
-                               token_response=d)
+                               revoke_uri = self.revoke_uri,
+                               id_token = d.get('id_token', None),
+                               token_response = d)
     else:
       logger.info('Failed to retrieve access token: %s' % content)
       if 'error' in d:
@@ -1311,8 +1311,8 @@ class OAuth2WebServerFlow(Flow):
 
 
 @util.positional(2)
-def flow_from_clientsecrets(filename, scope, redirect_uri=None,
-                            message=None, cache=None):
+def flow_from_clientsecrets(filename, scope, redirect_uri = None,
+                            message = None, cache = None):
   """Create a Flow from a clientsecrets file.
 
   Will create the right kind of Flow based on the contents of the clientsecrets
@@ -1340,7 +1340,7 @@ def flow_from_clientsecrets(filename, scope, redirect_uri=None,
       invalid.
   """
   try:
-    client_type, client_info = clientsecrets.loadfile(filename, cache=cache)
+    client_type, client_info = clientsecrets.loadfile(filename, cache = cache)
     if client_type in (clientsecrets.TYPE_WEB, clientsecrets.TYPE_INSTALLED):
       constructor_kwargs = {
           'redirect_uri': redirect_uri,

@@ -242,7 +242,7 @@ class JsonModel(BaseModel):
   content_type = 'application/json'
   alt_param = 'json'
 
-  def __init__(self, data_wrapper=False):
+  def __init__(self, data_wrapper = False):
     """Construct a JsonModel.
 
     Args:

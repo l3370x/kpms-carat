@@ -19,6 +19,6 @@ class MissingSocketTest(unittest.TestCase):
     def testProxyDisabled(self):
         proxy_info = httplib2.ProxyInfo('blah',
                                         'localhost', 0)
-        client = httplib2.Http(proxy_info=proxy_info)
+        client = httplib2.Http(proxy_info = proxy_info)
         self.assertRaises(httplib2.ProxiesUnavailableError,
                           client.request, 'http://localhost:-1/')

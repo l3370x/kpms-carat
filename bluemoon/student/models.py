@@ -10,12 +10,12 @@ from oauth2client.django_orm import CredentialsField
 
 
 class CredentialsModel(models.Model):
-  id = models.ForeignKey(User, primary_key = True)
-  credential = CredentialsField()
+	id = models.ForeignKey(User, primary_key = True)
+	credential = CredentialsField()
 
 
 class CredentialsAdmin(admin.ModelAdmin):
-    pass
+	pass
 
 
 admin.site.register(CredentialsModel, CredentialsAdmin)

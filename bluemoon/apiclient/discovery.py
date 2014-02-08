@@ -142,11 +142,11 @@ def key2param(key):
 @positional(2)
 def build(serviceName,
           version,
-          http=None,
-          discoveryServiceUrl=DISCOVERY_URI,
-          developerKey=None,
-          model=None,
-          requestBuilder=HttpRequest):
+          http = None,
+          discoveryServiceUrl = DISCOVERY_URI,
+          developerKey = None,
+          model = None,
+          requestBuilder = HttpRequest):
   """Construct a Resource for interacting with an API.
 
   Construct a Resource object for interacting with an API. The serviceName and
@@ -195,7 +195,7 @@ def build(serviceName,
     raise UnknownApiNameOrVersion("name: %s  version: %s" % (serviceName,
                                                             version))
   if resp.status >= 400:
-    raise HttpError(resp, content, uri=requested_url)
+    raise HttpError(resp, content, uri = requested_url)
 
   try:
     service = simplejson.loads(content)
@@ -203,19 +203,19 @@ def build(serviceName,
     logger.error('Failed to parse as JSON: ' + content)
     raise InvalidJsonError()
 
-  return build_from_document(content, base=discoveryServiceUrl, http=http,
-      developerKey=developerKey, model=model, requestBuilder=requestBuilder)
+  return build_from_document(content, base = discoveryServiceUrl, http = http,
+      developerKey = developerKey, model = model, requestBuilder = requestBuilder)
 
 
 @positional(1)
 def build_from_document(
     service,
-    base=None,
-    future=None,
-    http=None,
-    developerKey=None,
-    model=None,
-    requestBuilder=HttpRequest):
+    base = None,
+    future = None,
+    http = None,
+    developerKey = None,
+    model = None,
+    requestBuilder = HttpRequest):
   """Create a Resource for interacting with an API.
 
   Same as `build()`, but constructs the Resource object from a discovery
@@ -252,9 +252,9 @@ def build_from_document(
   if model is None:
     features = service.get('features', [])
     model = JsonModel('dataWrapper' in features)
-  return Resource(http=http, baseUrl=base, model=model,
-                  developerKey=developerKey, requestBuilder=requestBuilder,
-                  resourceDesc=service, rootDesc=service, schema=schema)
+  return Resource(http = http, baseUrl = base, model = model,
+                  developerKey = developerKey, requestBuilder = requestBuilder,
+                  resourceDesc = service, rootDesc = service, schema = schema)
 
 
 def _cast(value, schema_type):
@@ -654,7 +654,7 @@ def createMethod(methodName, methodDesc, rootDesc, schema):
         if not mimeparse.best_match([media_mime_type], ','.join(accept)):
           raise UnacceptableMimeTypeError(media_mime_type)
         media_upload = MediaFileUpload(media_filename,
-                                       mimetype=media_mime_type)
+                                       mimetype = media_mime_type)
       elif isinstance(media_filename, MediaUpload):
         media_upload = media_filename
       else:
@@ -710,11 +710,11 @@ def createMethod(methodName, methodDesc, rootDesc, schema):
     return self._requestBuilder(self._http,
                                 model.response,
                                 url,
-                                method=httpMethod,
-                                body=body,
-                                headers=headers,
-                                methodId=methodId,
-                                resumable=resumable)
+                                method = httpMethod,
+                                body = body,
+                                headers = headers,
+                                methodId = methodId,
+                                resumable = resumable)
 
   docs = [methodDesc.get('description', DEFAULT_METHOD_DOC), '\n\n']
   if len(parameters.argmap) > 0:
@@ -924,11 +924,11 @@ class Resource(object):
         methodName = fix_method_name(methodName)
 
         def methodResource(self):
-          return Resource(http=self._http, baseUrl=self._baseUrl,
-                          model=self._model, developerKey=self._developerKey,
-                          requestBuilder=self._requestBuilder,
-                          resourceDesc=methodDesc, rootDesc=rootDesc,
-                          schema=schema)
+          return Resource(http = self._http, baseUrl = self._baseUrl,
+                          model = self._model, developerKey = self._developerKey,
+                          requestBuilder = self._requestBuilder,
+                          resourceDesc = methodDesc, rootDesc = rootDesc,
+                          schema = schema)
 
         setattr(methodResource, '__doc__', 'A collection resource.')
         setattr(methodResource, '__is_resource__', True)

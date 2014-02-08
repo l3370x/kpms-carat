@@ -83,7 +83,7 @@ class Schemas(object):
     self.pretty = {}
 
   @util.positional(2)
-  def _prettyPrintByName(self, name, seen=None, dent=0):
+  def _prettyPrintByName(self, name, seen = None, dent = 0):
     """Get pretty printed object prototype from the schema name.
 
     Args:
@@ -105,7 +105,7 @@ class Schemas(object):
 
     if name not in self.pretty:
       self.pretty[name] = _SchemaToStruct(self.schemas[name],
-          seen, dent=dent).to_str(self._prettyPrintByName)
+          seen, dent = dent).to_str(self._prettyPrintByName)
 
     seen.pop()
 
@@ -122,10 +122,10 @@ class Schemas(object):
         comments that conforms to the given schema.
     """
     # Return with trailing comma and newline removed.
-    return self._prettyPrintByName(name, seen=[], dent=1)[:-2]
+    return self._prettyPrintByName(name, seen = [], dent = 1)[:-2]
 
   @util.positional(2)
-  def _prettyPrintSchema(self, schema, seen=None, dent=0):
+  def _prettyPrintSchema(self, schema, seen = None, dent = 0):
     """Get pretty printed object prototype of schema.
 
     Args:
@@ -140,7 +140,7 @@ class Schemas(object):
     if seen is None:
       seen = []
 
-    return _SchemaToStruct(schema, seen, dent=dent).to_str(self._prettyPrintByName)
+    return _SchemaToStruct(schema, seen, dent = dent).to_str(self._prettyPrintByName)
 
   def prettyPrintSchema(self, schema):
     """Get pretty printed object prototype of schema.
@@ -153,7 +153,7 @@ class Schemas(object):
         comments that conforms to the given schema.
     """
     # Return with trailing comma and newline removed.
-    return self._prettyPrintSchema(schema, dent=1)[:-2]
+    return self._prettyPrintSchema(schema, dent = 1)[:-2]
 
   def get(self, name):
     """Get deserialized JSON schema from the schema name.
@@ -168,7 +168,7 @@ class _SchemaToStruct(object):
   """Convert schema to a prototype object."""
 
   @util.positional(3)
-  def __init__(self, schema, seen, dent=0):
+  def __init__(self, schema, seen, dent = 0):
     """Constructor.
 
     Args:
@@ -261,7 +261,7 @@ class _SchemaToStruct(object):
     elif '$ref' in schema:
       schemaName = schema['$ref']
       description = schema.get('description', '')
-      s = self.from_cache(schemaName, seen=self.seen)
+      s = self.from_cache(schemaName, seen = self.seen)
       parts = s.splitlines()
       self.emitEnd(parts[0], description)
       for line in parts[1:]:

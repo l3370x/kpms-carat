@@ -75,7 +75,7 @@ class FunctionalProxyHttpTest(unittest.TestCase):
     def testSimpleProxy(self):
         proxy_info = httplib2.ProxyInfo(socks.PROXY_TYPE_HTTP,
                                         'localhost', self.proxyport)
-        client = httplib2.Http(proxy_info=proxy_info)
+        client = httplib2.Http(proxy_info = proxy_info)
         src = 'miniserver.py'
         response, body = client.request('http://localhost:%d/%s' %
                                         (self.port, src))

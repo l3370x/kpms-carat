@@ -34,10 +34,10 @@ from oauth2client import util
 DELIMITER = ':'
 
 # 1 hour in seconds
-DEFAULT_TIMEOUT_SECS = 1*60*60
+DEFAULT_TIMEOUT_SECS = 1 * 60 * 60
 
 @util.positional(2)
-def generate_token(key, user_id, action_id="", when=None):
+def generate_token(key, user_id, action_id = "", when = None):
   """Generates a URL-safe token for the given user, action, time tuple.
 
   Args:
@@ -67,7 +67,7 @@ def generate_token(key, user_id, action_id="", when=None):
 
 
 @util.positional(3)
-def validate_token(key, token, user_id, action_id="", current_time=None):
+def validate_token(key, token, user_id, action_id = "", current_time = None):
   """Validates that the given token authorizes the user for the action.
 
   Tokens are invalid if the time of issue is too old or if the token
@@ -98,8 +98,8 @@ def validate_token(key, token, user_id, action_id="", current_time=None):
     return False
 
   # The given token should match the generated one with the same time.
-  expected_token = generate_token(key, user_id, action_id=action_id,
-                                  when=token_time)
+  expected_token = generate_token(key, user_id, action_id = action_id,
+                                  when = token_time)
   if len(token) != len(expected_token):
     return False
 

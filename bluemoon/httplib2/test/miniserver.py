@@ -32,7 +32,7 @@ class ShutdownServer(SocketServer.TCPServer):
         self.__is_shut_down = threading.Event()
         self.__serving = False
 
-    def serve_forever(self, poll_interval=0.1):
+    def serve_forever(self, poll_interval = 0.1):
         """Handle one request at a time until shutdown.
 
         Polls for shutdown every poll_interval seconds. Ignores
@@ -95,6 +95,6 @@ class ShutdownServer(SocketServer.TCPServer):
 
 def start_server(handler):
     httpd = ShutdownServer(("", 0), handler)
-    threading.Thread(target=httpd.serve_forever).start()
+    threading.Thread(target = httpd.serve_forever).start()
     _, port = httpd.socket.getsockname()
     return httpd, port

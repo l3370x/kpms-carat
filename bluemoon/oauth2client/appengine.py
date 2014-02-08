@@ -73,7 +73,7 @@ def _safe_html(s):
   Returns:
     The escaped text as a string.
   """
-  return cgi.escape(s, quote=1).replace("'", '&#39;')
+  return cgi.escape(s, quote = 1).replace("'", '&#39;')
 
 
 class InvalidClientSecretsError(Exception):
@@ -126,15 +126,15 @@ def xsrf_secret_key():
   Returns:
     The secret key.
   """
-  secret = memcache.get(XSRF_MEMCACHE_ID, namespace=OAUTH2CLIENT_NAMESPACE)
+  secret = memcache.get(XSRF_MEMCACHE_ID, namespace = OAUTH2CLIENT_NAMESPACE)
   if not secret:
     # Load the one and only instance of SiteXsrfSecretKey.
-    model = SiteXsrfSecretKey.get_or_insert(key_name='site')
+    model = SiteXsrfSecretKey.get_or_insert(key_name = 'site')
     if not model.secret:
       model.secret = _generate_new_xsrf_secret_key()
       model.put()
     secret = model.secret
-    memcache.add(XSRF_MEMCACHE_ID, secret, namespace=OAUTH2CLIENT_NAMESPACE)
+    memcache.add(XSRF_MEMCACHE_ID, secret, namespace = OAUTH2CLIENT_NAMESPACE)
 
   return str(secret)
 
@@ -292,7 +292,7 @@ class CredentialsProperty(db.Property):
       raise db.BadValueError('Property %s must be convertible '
                           'to a Credentials instance (%s)' %
                             (self.name, value))
-    #if value is not None and not isinstance(value, Credentials):
+    # if value is not None and not isinstance(value, Credentials):
     #  return None
     return value
 
@@ -368,7 +368,7 @@ class StorageByKeyName(Storage):
   """
 
   @util.positional(4)
-  def __init__(self, model, key_name, property_name, cache=None, user=None):
+  def __init__(self, model, key_name, property_name, cache = None, user = None):
     """Constructor for Storage.
 
     Args:
@@ -520,7 +520,7 @@ def _build_state_value(request_handler, user):
   """
   uri = request_handler.request.url
   token = xsrfutil.generate_token(xsrf_secret_key(), user.user_id(),
-                                  action_id=str(uri))
+                                  action_id = str(uri))
   return  uri + ':' + token
 
 
@@ -541,7 +541,7 @@ def _parse_state_value(state, user):
   """
   uri, token = state.rsplit(':', 1)
   if not xsrfutil.validate_token(xsrf_secret_key(), token, user.user_id(),
-                                 action_id=uri):
+                                 action_id = uri):
     raise InvalidXsrfTokenError()
 
   return uri
@@ -604,16 +604,16 @@ class OAuth2Decorator(object):
 
   @util.positional(4)
   def __init__(self, client_id, client_secret, scope,
-               auth_uri=GOOGLE_AUTH_URI,
-               token_uri=GOOGLE_TOKEN_URI,
-               revoke_uri=GOOGLE_REVOKE_URI,
-               user_agent=None,
-               message=None,
-               callback_path='/oauth2callback',
-               token_response_param=None,
-               _storage_class=StorageByKeyName,
-               _credentials_class=CredentialsModel,
-               _credentials_property_name='credentials',
+               auth_uri = GOOGLE_AUTH_URI,
+               token_uri = GOOGLE_TOKEN_URI,
+               revoke_uri = GOOGLE_REVOKE_URI,
+               user_agent = None,
+               message = None,
+               callback_path = '/oauth2callback',
+               token_response_param = None,
+               _storage_class = StorageByKeyName,
+               _credentials_class = CredentialsModel,
+               _credentials_property_name = 'credentials',
                **kwargs):
 
     """Constructor for OAuth2Decorator
@@ -706,7 +706,7 @@ class OAuth2Decorator(object):
       self.flow.params['state'] = _build_state_value(request_handler, user)
       self.credentials = self._storage_class(
           self._credentials_class, None,
-          self._credentials_property_name, user=user).get()
+          self._credentials_property_name, user = user).get()
 
       if not self.has_credentials():
         return request_handler.redirect(self.authorize_url())
@@ -732,13 +732,13 @@ class OAuth2Decorator(object):
     """
     if self.flow is None:
       redirect_uri = request_handler.request.relative_url(
-          self._callback_path) # Usually /oauth2callback
+          self._callback_path)  # Usually /oauth2callback
       self.flow = OAuth2WebServerFlow(self._client_id, self._client_secret,
-                                      self._scope, redirect_uri=redirect_uri,
-                                      user_agent=self._user_agent,
-                                      auth_uri=self._auth_uri,
-                                      token_uri=self._token_uri,
-                                      revoke_uri=self._revoke_uri,
+                                      self._scope, redirect_uri = redirect_uri,
+                                      user_agent = self._user_agent,
+                                      auth_uri = self._auth_uri,
+                                      token_uri = self._token_uri,
+                                      revoke_uri = self._revoke_uri,
                                       **self._kwargs)
 
   def oauth_aware(self, method):
@@ -772,7 +772,7 @@ class OAuth2Decorator(object):
       self.flow.params['state'] = _build_state_value(request_handler, user)
       self.credentials = self._storage_class(
           self._credentials_class, None,
-          self._credentials_property_name, user=user).get()
+          self._credentials_property_name, user = user).get()
       try:
         resp = method(request_handler, *args, **kwargs)
       finally:
@@ -853,7 +853,7 @@ class OAuth2Decorator(object):
           credentials = decorator.flow.step2_exchange(self.request.params)
           decorator._storage_class(
               decorator._credentials_class, None,
-              decorator._credentials_property_name, user=user).put(credentials)
+              decorator._credentials_property_name, user = user).put(credentials)
           redirect_uri = _parse_state_value(str(self.request.get('state')),
                                             user)
 
@@ -904,7 +904,7 @@ class OAuth2DecoratorFromClientSecrets(OAuth2Decorator):
   """
 
   @util.positional(3)
-  def __init__(self, filename, scope, message=None, cache=None):
+  def __init__(self, filename, scope, message = None, cache = None):
     """Constructor
 
     Args:
@@ -918,7 +918,7 @@ class OAuth2DecoratorFromClientSecrets(OAuth2Decorator):
       cache: An optional cache service client that implements get() and set()
         methods. See clientsecrets.loadfile() for details.
     """
-    client_type, client_info = clientsecrets.loadfile(filename, cache=cache)
+    client_type, client_info = clientsecrets.loadfile(filename, cache = cache)
     if client_type not in [
         clientsecrets.TYPE_WEB, clientsecrets.TYPE_INSTALLED]:
       raise InvalidClientSecretsError(
@@ -942,7 +942,7 @@ class OAuth2DecoratorFromClientSecrets(OAuth2Decorator):
 
 @util.positional(2)
 def oauth2decorator_from_clientsecrets(filename, scope,
-                                       message=None, cache=None):
+                                       message = None, cache = None):
   """Creates an OAuth2Decorator populated from a clientsecrets file.
 
   Args:
@@ -960,4 +960,4 @@ def oauth2decorator_from_clientsecrets(filename, scope,
 
   """
   return OAuth2DecoratorFromClientSecrets(filename, scope,
-                                          message=message, cache=cache)
+                                          message = message, cache = cache)

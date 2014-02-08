@@ -10,7 +10,7 @@ MODIFIER = ":^"
 TEMPLATE = re.compile(r"{(?P<operator>[\+\./;\?|!@])?(?P<varlist>[^}]+)}", re.UNICODE)
 VAR = re.compile(r"^(?P<varname>[^=\+\*:\^]+)((?P<explode>[\+\*])|(?P<partial>[:\^]-?[0-9]+))?(=(?P<default>.*))?$", re.UNICODE)
 
-def _tostring(varname, value, explode, operator, safe=""):
+def _tostring(varname, value, explode, operator, safe = ""):
   if type(value) == type([]):
     if explode == "+":
       return ",".join([varname + "." + urllib.quote(x, safe) for x in value])
@@ -27,7 +27,7 @@ def _tostring(varname, value, explode, operator, safe=""):
     return urllib.quote(value, safe)
 
 
-def _tostring_path(varname, value, explode, operator, safe=""):
+def _tostring_path(varname, value, explode, operator, safe = ""):
   joiner = operator
   if type(value) == type([]):
     if explode == "+":
@@ -51,7 +51,7 @@ def _tostring_path(varname, value, explode, operator, safe=""):
     else:
       return ""
 
-def _tostring_query(varname, value, explode, operator, safe=""):
+def _tostring_query(varname, value, explode, operator, safe = ""):
   joiner = operator
   varprefix = ""
   if operator == "?":
@@ -81,7 +81,7 @@ def _tostring_query(varname, value, explode, operator, safe=""):
     if value:
       return varname + "=" + urllib.quote(value, safe)
     else:
-      return varname 
+      return varname
 
 TOSTRING = {
     "" : _tostring,
@@ -131,14 +131,14 @@ def expand(template, vars):
     for varname, explode, partial in varnames:
       if varname in vars:
         value = vars[varname]
-        #if not value and (type(value) == type({}) or type(value) == type([])) and varname in defaults:
+        # if not value and (type(value) == type({}) or type(value) == type([])) and varname in defaults:
         if not value and value != "" and varname in defaults:
           value = defaults[varname]
       elif varname in defaults:
         value = defaults[varname]
       else:
         continue
-      retval.append(TOSTRING[operator](varname, value, explode, operator, safe=safe))
+      retval.append(TOSTRING[operator](varname, value, explode, operator, safe = safe))
     if "".join(retval):
       return prefix + joiner.join(retval)
     else:

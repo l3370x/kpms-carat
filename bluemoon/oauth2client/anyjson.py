@@ -21,10 +21,10 @@ we get a simplejson module from.
 __author__ = 'jcgregorio@google.com (Joe Gregorio)'
 
 
-try: # pragma: no cover
+try:  # pragma: no cover
   # Should work for Python2.6 and higher.
   import json as simplejson
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
   try:
     import simplejson
   except ImportError:

@@ -93,7 +93,7 @@ _socks4errors = ("request granted",
     "request rejected because the client program and identd report different user-ids",
     "unknown error")
 
-def setdefaultproxy(proxytype=None, addr=None, port=None, rdns=True, username=None, password=None):
+def setdefaultproxy(proxytype = None, addr = None, port = None, rdns = True, username = None, password = None):
     """setdefaultproxy(proxytype, addr[, port[, rdns[, username[, password]]]])
     Sets a default proxy which all further socksocket objects will use,
     unless explicitly changed.
@@ -120,7 +120,7 @@ class socksocket(socket.socket):
     you must specify family=AF_INET, type=SOCK_STREAM and proto=0.
     """
 
-    def __init__(self, family=socket.AF_INET, type=socket.SOCK_STREAM, proto=0, _sock=None):
+    def __init__(self, family = socket.AF_INET, type = socket.SOCK_STREAM, proto = 0, _sock = None):
         _orgsocket.__init__(self, family, type, proto, _sock)
         if _defaultproxy != None:
             self.__proxy = _defaultproxy
@@ -137,7 +137,7 @@ class socksocket(socket.socket):
         """
         data = self.recv(count)
         while len(data) < count:
-            d = self.recv(count-len(data))
+            d = self.recv(count - len(data))
             if not d: raise GeneralProxyError((0, "connection closed unexpectedly"))
             data = data + d
         return data
@@ -177,7 +177,7 @@ class socksocket(socket.socket):
         auth = self.__proxy[4] + ":" + self.__proxy[5]
         return "Proxy-Authorization: Basic " + base64.b64encode(auth)
 
-    def setproxy(self, proxytype=None, addr=None, port=None, rdns=True, username=None, password=None):
+    def setproxy(self, proxytype = None, addr = None, port = None, rdns = True, username = None, password = None):
         """setproxy(proxytype, addr[, port[, rdns[, username[, password]]]])
         Sets the proxy to be used.
         proxytype -    The type of the proxy to be used. Three types
@@ -201,7 +201,7 @@ class socksocket(socket.socket):
         Negotiates a connection through a SOCKS5 server.
         """
         # First we'll send the authentication packages we support.
-        if (self.__proxy[4]!=None) and (self.__proxy[5]!=None):
+        if (self.__proxy[4] != None) and (self.__proxy[5] != None):
             # The username/password details were supplied to the
             # setproxy method so we support the USERNAME/PASSWORD
             # authentication (in addition to the standard none).
@@ -268,7 +268,7 @@ class socksocket(socket.socket):
         elif resp[1:2] != chr(0x00).encode():
             # Connection failed
             self.close()
-            if ord(resp[1:2])<=8:
+            if ord(resp[1:2]) <= 8:
                 raise Socks5Error((ord(resp[1:2]), _socks5errors[ord(resp[1:2])]))
             else:
                 raise Socks5Error((9, _socks5errors[9]))
@@ -280,7 +280,7 @@ class socksocket(socket.socket):
             boundaddr = self.__recvall(ord(resp[4:5]))
         else:
             self.close()
-            raise GeneralProxyError((1,_generalerrors[1]))
+            raise GeneralProxyError((1, _generalerrors[1]))
         boundport = struct.unpack(">H", self.__recvall(2))[0]
         self.__proxysockname = (boundaddr, boundport)
         if ipaddr != None:
@@ -307,7 +307,7 @@ class socksocket(socket.socket):
         """
         return self.__proxypeername
 
-    def __negotiatesocks4(self,destaddr,destport):
+    def __negotiatesocks4(self, destaddr, destport):
         """__negotiatesocks4(self,destaddr,destport)
         Negotiates a connection through a SOCKS4 server.
         """
@@ -339,7 +339,7 @@ class socksocket(socket.socket):
         if resp[0:1] != chr(0x00).encode():
             # Bad data
             self.close()
-            raise GeneralProxyError((1,_generalerrors[1]))
+            raise GeneralProxyError((1, _generalerrors[1]))
         if resp[1:2] != chr(0x5A).encode():
             # Server returned an error
             self.close()
@@ -364,7 +364,7 @@ class socksocket(socket.socket):
             addr = socket.gethostbyname(destaddr)
         else:
             addr = destaddr
-        headers =  ["CONNECT ", addr, ":", str(destport), " HTTP/1.1\r\n"]
+        headers = ["CONNECT ", addr, ":", str(destport), " HTTP/1.1\r\n"]
         headers += ["Host: ", destaddr, "\r\n"]
         if (self.__proxy[4] != None and self.__proxy[5] != None):
                 headers += [self.__getauthheader(), "\r\n"]
@@ -399,7 +399,7 @@ class socksocket(socket.socket):
         To select the proxy server use setproxy().
         """
         # Do a minimal input check first
-        if (not type(destpair) in (list,tuple)) or (len(destpair) < 2) or (not isinstance(destpair[0], basestring)) or (type(destpair[1]) != int):
+        if (not type(destpair) in (list, tuple)) or (len(destpair) < 2) or (not isinstance(destpair[0], basestring)) or (type(destpair[1]) != int):
             raise GeneralProxyError((5, _generalerrors[5]))
         if self.__proxy[0] == PROXY_TYPE_SOCKS5:
             if self.__proxy[2] != None:
@@ -413,23 +413,23 @@ class socksocket(socket.socket):
                 portnum = self.__proxy[2]
             else:
                 portnum = 1080
-            _orgsocket.connect(self,(self.__proxy[1], portnum))
+            _orgsocket.connect(self, (self.__proxy[1], portnum))
             self.__negotiatesocks4(destpair[0], destpair[1])
         elif self.__proxy[0] == PROXY_TYPE_HTTP:
             if self.__proxy[2] != None:
                 portnum = self.__proxy[2]
             else:
                 portnum = 8080
-            _orgsocket.connect(self,(self.__proxy[1], portnum))
+            _orgsocket.connect(self, (self.__proxy[1], portnum))
             self.__negotiatehttp(destpair[0], destpair[1])
         elif self.__proxy[0] == PROXY_TYPE_HTTP_NO_TUNNEL:
             if self.__proxy[2] != None:
                 portnum = self.__proxy[2]
             else:
                 portnum = 8080
-            _orgsocket.connect(self,(self.__proxy[1],portnum))
+            _orgsocket.connect(self, (self.__proxy[1], portnum))
             if destpair[1] == 443:
-                self.__negotiatehttp(destpair[0],destpair[1])
+                self.__negotiatehttp(destpair[0], destpair[1])
             else:
                 self.__httptunnel = False
         elif self.__proxy[0] == None:
